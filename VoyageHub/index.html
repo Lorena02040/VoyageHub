@@ -91,25 +91,47 @@
             font-style: italic; /* Adicionei estilo itálico */
         }
         .denuncia {
-            padding: 15px; /* Preenchimento dos blocos de denúncia */
-            margin: 10px 0; /* Margem dos blocos de denúncia */
-            border-radius: 5px; /* Arredonda os cantos dos blocos de denúncia */
+        padding: 15px 20px; /* Mais espaçamento interno */
+        margin: 10px 0;
+        border-radius: 15px;
+        border: 2px solid transparent;
         }
-        .red { background-color: #f8d7da; border-left: 5px solid #dc3545; } /* Estilo para denúncias vermelhas */
-        .yellow { background-color: #fff3cd; border-left: 5px solid #ffc107; } /* Estilo para denúncias amarelas */
-        .green { background-color: #d4edda; border-left: 5px solid #28a745; } /* Estilo para denúncias verdes */
+        .red { 
+        background-color: #f8d7da; 
+        border-left: 5px solid #dc3545;
+        border: 2px solid #dc3545;
+        box-shadow: 2px 2px 5px rgba(220, 53, 69, 0.2);
+        }
+        .yellow { 
+        background-color: #fff3cd; 
+        border-left: 5px solid #ffc107;
+        border: 2px solid #ffc107;
+        box-shadow: 2px 2px 5px rgba(255, 193, 7, 0.2);
+        }
+        .green { 
+        background-color: #d4edda; 
+        border-left: 5px solid #28a745;
+        border: 2px solid #28a745;
+        box-shadow: 2px 2px 5px rgba(40, 167, 69, 0.2);
+        }
         .button {
-            display: inline-block; /* Permite que os botões fiquem na mesma linha */
-            padding: 10px 15px; /* Preenchimento dos botões */
-            margin: 5px; /* Margem dos botões */
-            border: none; /* Remove a borda padrão dos botões */
-            background-color: #354a9b; /* Cor de fundo dos botões */
-            color: white; /* Cor do texto dos botões */
-            border-radius: 5px; /* Arredonda os cantos dos botões */
-            cursor: pointer; /* Muda o cursor para "pointer" ao passar o mouse */
+        display: block; 
+        width: 200px; /* Define um tamanho fixo */
+        padding: 12px;
+        margin: 10px auto; /* Centraliza os botões */
+        border: none;
+        background-color: #2c3e91;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        border-radius: 10px; /* Bordas arredondadas */
+        cursor: pointer;
+        text-align: center;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+        transition: background 0.3s ease;
         }
         .button:hover {
-            background-color: #2c3e91; /* Cor de fundo dos botões ao passar o mouse */
+            background-color: #1f2e6d;
         }
         .footer {
             text-align: center; /* Alinha o texto ao centro */
@@ -132,6 +154,22 @@
             width: 200px; /* Ajuste o tamanho conforme necessário */
             height: auto; /* Mantém a proporção da imagem */
             margin-bottom: 20px; /* Adiciona espaço abaixo da imagem */
+        }
+        .new-reports {
+        background-color: #dc3545;
+        color: white;
+        font-weight: bold;
+        padding: 8px 12px;
+        border-radius: 15px;
+        display: inline-block;
+        margin-bottom: 15px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .button-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px; /* Espaçamento entre botões */
         }
     </style>
 </head>
@@ -240,6 +278,12 @@
         <button class="button" onclick="aprovarRejeitar()">APROVAR/REJEITAR</button>
         <button class="button" onclick="criarAviso()">CRIAR AVISO INTERNO</button>
     </div>
+    <div class="button-container">
+    <button class="button">ATUALIZAR DASHBOARD</button>
+    <button class="button">APROVAR/REJEITAR</button>
+    <button class="button">CRIAR AVISO INTERNO</button>
+</div>
+    <div class="new-reports">🔴 120 novas denúncias</div>
     <div class="footer">©2025 Todos os direitos reservados para Tech Seul</div>
     <script>
         function atualizarDashboard() {
