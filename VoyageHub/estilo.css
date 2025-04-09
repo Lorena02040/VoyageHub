@@ -1,0 +1,230 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #dbe2f0;
+}
+
+/* Sidebar principal */
+.sidebar {
+    width: 250px;
+    background-color: #354a9b;
+    color: white;
+    height: 98vh;
+    position: fixed;
+    padding-top: 20px;
+    text-align: center;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    z-index: 100;
+    float: left;
+}
+
+.sidebar a {
+    display: block;
+    padding: 15px;
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.sidebar a:hover {
+    background-color: #2c3e91;
+}
+
+/* Regra geral para as imagens dos links */
+.sidebar a img {
+    vertical-align: middle;
+}
+
+/* Classes específicas para cada ícone */
+
+/* Ícone para "Cadastro" */
+.sidebar a img.user-icon {
+    width: 60px;  /* Tamanho maior para o ícone de cadastro */
+    height: 60px;
+}
+
+/* Ícone para "Denúncias" */
+.sidebar a img.reports-icon {
+    width: 45%;  /* Tamanho médio para denúncias */
+    height: 45%;
+}
+
+/* Ícone para "Configurações" */
+.sidebar a img.settings-icon {
+    width: 35%;  /* Tamanho menor para configurações */
+    height: 35%;
+}
+
+/* Restante do CSS mantém-se igual... */
+
+.menu-bar {
+    width: 150px;
+    background-color: #ffffff;
+    height: 75vh;
+    position: fixed;
+    left: 250px;
+    top: 100px;
+    z-index: 90;
+    border-radius: 0 35px 35px 0;
+    box-shadow: 5px 0px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.menu-bar a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+}
+
+.menu-bar a img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+header {
+    background-color: #5D73DA;
+    padding: 15px;
+    color: white;
+    text-align: right;
+    font-weight: bold;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 110;
+}
+
+.dashboard {
+    display: flex;
+    gap: 30px;
+    background: white;
+    padding: 35px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 35px;
+    position: absolute;
+    left: 48%;
+    transform: translateX(-20%);
+    width: 660px;
+    top: 115px;
+}
+
+.dashboard-title {
+    position: absolute;
+    top: -35px;
+    left: 45%;
+    transform: translateX(-50%);
+    font-size: 28px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.dashboard-left,
+.dashboard-right {
+    flex: 1;
+}
+
+.dashboard-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.dashboard-right {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.denuncia {
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.red { background-color: #f8d7da; border-left: 5px solid #dc3545; }
+.yellow { background-color: #fff3cd; border-left: 5px solid #ffc107; }
+.green { background-color: #d4edda; border-left: 5px solid #28a745; }
+
+.button {
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border: none;
+    background-color: #354a9b;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+}
+
+.button:hover {
+    background-color: #2c3e91;
+}
+
+.footer {
+    text-align: center;
+    padding: 6px;
+    font-size: 14px;
+    background-color: #5D73DA;
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 99;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 70px;
+        padding-top: 10px;
+    }
+    .sidebar a p {
+        margin: 10px 0;  /* Adiciona 10px de margem em cima e embaixo */
+        text-align: center;
+    }
+    .sidebar a {
+        padding: 10px;
+        font-size: 14px;
+    }
+    .sidebar a p {
+        display: none;
+    }
+    .menu-bar {
+        left: 70px;
+        width: 120px;
+        top: 80px;
+    }
+    .dashboard {
+        position: static;
+        width: 90%;
+        margin: 120px auto 40px;
+        transform: none;
+    }
+    .dashboard-title {
+        position: static;
+        transform: none;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    header {
+        text-align: center;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-bar {
+        top: 60px;
+        width: 100px;
+    }
+    header {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
