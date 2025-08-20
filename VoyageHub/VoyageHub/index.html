@@ -5,51 +5,176 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="estilo.css" />
   <title>Dashboard de Gerenciamento</title>
+  <style>
+    :root{
+      --azul:#354a9b;
+      --azul-escuro:#2c3e91;
+      --bg:#dbe2f0;
+      --white:#fff;
+      --card-shadow:0 6px 20px rgba(0,0,0,.15);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family: Arial, sans-serif;
+      background:var(--bg);
+      height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* ====== SIDEBAR ====== */
+    .sidebar{
+      position:fixed;
+      left:0;top:0;bottom:0;
+      width:200px;
+      background:var(--azul);
+      border-top-right-radius:40px;
+      border-bottom-right-radius:40px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding:20px 10px;
+      color:#fff;
+    }
+    .sidebar img{margin-bottom:20px;}
+    .sidebar a{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-decoration:none;
+      color:#fff;
+      margin:20px 0;
+    }
+    .sidebar a img{width:36px;height:36px;margin-bottom:6px;}
+
+    /* ====== MENU SECUNDÁRIO ====== */
+    .menu-bar{
+      position:fixed;
+      top:120px;
+      left:220px;
+      width:60px;
+      background:#fff;
+      border-radius:20px;
+      padding:20px 0;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:30px;
+      box-shadow:var(--card-shadow);
+    }
+    .menu-bar img{width:28px;height:28px;}
+
+    /* ====== HEADER ====== */
+    header{
+      position:fixed;
+      top:20px;right:20px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:bold;
+      color:#333;
+    }
+    header img{width:32px;height:32px;}
+
+    /* ====== CONTEÚDO ====== */
+    main{
+      flex:1;
+      padding-left:300px; /* espaço sidebar + menu-bar */
+      padding-top:80px;
+      padding-right:40px;
+    }
+    .dashboard-title{
+      text-align:center;
+      margin-bottom:20px;
+    }
+    .dashboard{
+      display:grid;
+      grid-template-columns:250px 1fr;
+      gap:20px;
+    }
+    .dashboard-left{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+    .dashboard-left button{
+      background:var(--azul);
+      color:#fff;
+      border:0;
+      padding:14px 16px;
+      border-radius:10px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .dashboard-left button:hover{ background:var(--azul-escuro); }
+
+    .dashboard-right{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+    .denuncia{
+      border-radius:14px;
+      padding:14px 16px;
+    }
+    .red{ background:#f9d8dc; border-left:6px solid #dc3545;}
+    .yellow{ background:#fff1c9; border-left:6px solid #f3c221;}
+    .green{ background:#d9f2dc; border-left:6px solid #28a745;}
+
+    /* ====== FOOTER ====== */
+    .footer{
+      background:#5D73DA; 
+      color:#fff;
+      text-align:center;
+      padding:10px;
+      font-weight:600;
+    }
+
+    /* ====== RESPONSIVO ====== */
+    @media(max-width:768px){
+      .sidebar{width:72px;}
+      .sidebar a p{display:none;}
+      .menu-bar{left:90px;}
+      main{padding-left:180px;}
+      .dashboard{grid-template-columns:1fr;}
+    }
+  </style>
 </head>
 <body>
   <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
-    <img src="assets/imgs/logo.png" alt="Logotipo VoyageBus" id="logoSidebar">
-    <a href="#">
-      <img src="assets/imgs/Register_User.png" alt="Cadastro" class="user-icon">
-      <p>Cadastrar</p>
-    </a>
-    <a href="#">
-      <img src="assets/imgs/Complaint.png" alt="Denúncia" class="reports-icon">
-      <p>Denúncias</p>
-    </a>
-    <a href="#">
-      <img src="assets/imgs/Settings.png" alt="Configurações" class="settings-icon">
-      <p>Configurações</p>
-    </a>
+  <aside class="sidebar">
+    <img src="assets/imgs/logo.png" alt="Logotipo VoyageBus" width="120">
+    <a href="#"><img src="assets/imgs/Register_User.png"><p>Cadastrar</p></a>
+    <a href="#"><img src="assets/imgs/Complaint.png"><p>Denúncias</p></a>
+    <a href="#"><img src="assets/imgs/Settings.png"><p>Configurações</p></a>
   </aside>
 
-  <!-- Menu lateral secundário -->
+  <!-- Menu secundário -->
   <nav class="menu-bar">
     <a href="#"><img src="assets/imgs/menu.png" alt="Menu"></a>
     <a href="#"><img src="assets/imgs/admin_panel_settings.png" alt="Segurança"></a>
     <a href="#"><img src="assets/imgs/user_header.png" alt="User"></a>
   </nav>
 
-  <!-- Cabeçalho -->
+  <!-- Header -->
   <header>
     <span>GESSIKA LOPES - ADM</span>
     <a href="#"><img src="assets/imgs/user_header.png" alt="User"></a>
   </header>
 
   <!-- Conteúdo -->
-  <main class="content">
-    <section class="dashboard">
-      <h1 class="dashboard-title">Dashboard de Gerenciamento</h1>
-
-      <!-- Coluna esquerda: botões -->
+  <main>
+    <h1 class="dashboard-title">Dashboard de Gerenciamento</h1>
+    <div class="dashboard">
+      <!-- Coluna esquerda -->
       <div class="dashboard-left">
-        <button class="button" onclick="atualizarDashboard()">ATUALIZAR DASHBOARD</button>
-        <button class="button" onclick="aprovarRejeitar()">APROVAR/REJEITAR</button>
-        <button class="button" onclick="criarAviso()">CRIAR AVISO INTERNO</button>
+        <button>ATUALIZAR DASHBOARD</button>
+        <button>APROVAR/REJEITAR</button>
+        <button>CRIAR AVISO INTERNO</button>
       </div>
 
-      <!-- Coluna direita: denúncias -->
+      <!-- Coluna direita -->
       <div class="dashboard-right">
         <div class="denuncia red">
           <strong>USUÁRIO:</strong> João Vasconcelos<br>
@@ -67,16 +192,10 @@
           <strong>ONDE OCORREU:</strong> Na rodoviária.<br>
         </div>
       </div>
-    </section>
+    </div>
   </main>
 
   <!-- Rodapé -->
   <footer class="footer">©2025 Todos os direitos reservados para Tech Seul</footer>
-
-  <script>
-    function atualizarDashboard(){ alert("Funcionalidade de atualizar dashboard ainda não implementada."); }
-    function aprovarRejeitar(){ alert("Funcionalidade de aprovar/rejeitar ainda não implementada."); }
-    function criarAviso(){ alert("Funcionalidade de criar aviso interno ainda não implementada."); }
-  </script>
 </body>
 </html>
