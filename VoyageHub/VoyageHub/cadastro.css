@@ -1,0 +1,484 @@
+:root {
+  --azul: #354a9b;
+  --azul-escuro: #2c3e91;
+  --bg: #dbe2f0;
+  --white: #fff;
+  --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+}
+
+/* ====== SIDEBAR PRINCIPAL ====== */
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 250px;
+  background: var(--azul);
+  color: #fff;
+  padding: 18px 12px;
+  border-top-right-radius: 52px;
+  border-bottom-right-radius: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 100;
+}
+.sidebar .logo {
+  width: 150px;
+  height: auto;
+  margin: 6px 0 24px;
+}
+.sidebar a {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 14px;
+  transition: 0.2s;
+}
+.sidebar a img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+.sidebar a:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ====== TOPO ====== */
+.topbar {
+  position: fixed;
+  left: 250px;
+  right: 0;
+  top: 0;
+  height: 72px;
+  background: #5d73da;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px;
+  z-index: 90;
+}
+.topbar h1 {
+  font-size: 28px;
+  font-style: italic;
+  margin: 0;
+}
+.userbox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: bold;
+}
+.userbox img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+}
+
+/* ===== HEADER ===== */
+header {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 60px; /* Ajuste a altura conforme sua necessidade */
+  background: #5d73da; /* Ou a cor que preferir */
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Alinha o conteúdo à direita */
+  padding: 0 20px;
+  font-weight: bold;
+  z-index: 99; /* Garante que fique acima de outros elementos */
+}
+header img {
+  width: 32px;
+  height: 32px;
+}
+
+header span {
+  margin-right: 10px;
+}
+
+.user-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+/* ====== MENU BAR (cartão branco com 3 ícones) ====== */
+.menu-bar {
+  position: fixed;
+  top: 120px;
+  left: 250px;
+  width: 210px;
+  background: #fff;
+  border-radius: 36px;
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  box-shadow: var(--card-shadow);
+  z-index: 85;
+}
+.icon-btn {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-btn img {
+  width: 48px;
+  height: 48px;
+}
+
+/* ====== ESTILO ITEM SELECIONADO ====== */
+.sidebar a.active {
+  background: #7d7e80;                  /* card branco atrás */
+  color: var(--azul);                /* texto e ícone ficam azuis */
+  box-shadow: var(--card-shadow);
+  font-weight: bold;
+}
+
+.sidebar a.active img {
+  filter: brightness(0) saturate(100%) invert(20%) sepia(64%) saturate(1841%) hue-rotate(211deg) brightness(91%) contrast(92%);
+  /* esse filtro deixa o ícone em tom azul, ajusta conforme preferir */
+}
+
+/* ===== Menu Secundário ===== */
+.menu-bar {
+  position: fixed;
+  top: 100px;
+  left: 250px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: var(--card-shadow);
+  z-index: 90;
+
+  width: 70px;              /* fechado */
+  overflow: hidden;
+  transition: width 0.3s ease;
+}
+.menu-bar a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  white-space: nowrap;
+  text-decoration: none;
+  color: #333;
+  position: relative;
+}
+.menu-bar a img {
+  width: 28px;
+  height: 28px;
+}
+.menu-bar a p {
+  display: none;
+}
+
+/* expandido */
+#toggleMenu:checked ~ .menu-bar {
+  width: 250px;
+}
+#toggleMenu:checked ~ .menu-bar a p {
+  display: inline;
+}
+
+/* botão de toggle */
+.menu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.menu-toggle img {
+  width: 28px;
+  height: 28px;
+}
+
+/* quando o menu está aberto, aplica linha */
+.menu-bar.open a {
+  border-bottom: 3.5px solid rgba(0,0,0,0.1);
+}
+
+/* opcional: remove a linha do último item */
+.menu-bar.open a:last-child {
+  border-bottom: none;
+}
+
+/* ====== CONTEÚDO CENTRAL ====== */
+.dashboard {
+  /* Estas propriedades já estão no seu código */
+  background: #fff;
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: var(--card-shadow);
+  
+  /* E as propriedades do grid que definem o layout */
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 14px;
+}
+.dash-wrap {
+  padding-left: 250px; /* espaço da sidebar */
+  padding-top: 90px; /* espaço do header */
+  padding-right: 16px;
+}
+/* Novo estilo para a lista de status de denúncias */
+.status-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #333;
+}
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.red-dot { background-color: #dc3545; }
+.orange-dot { background-color: #fd7e14; }
+.yellow-dot { background-color: #ffc107; }
+.green-dot { background-color: #28a745; }
+
+.col-left .btn {
+  background: var(--azul);
+  color: #fff;
+  border: 0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.col-left .btn:hover {
+  background: var(--azul-escuro);
+}
+
+.divider {
+  width: 1px;
+  background: #dcdde7;
+  border-radius: 1px;
+  margin: 0 4px;
+}
+
+.denuncia {
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  position: relative;
+}
+.denuncia header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.denuncia .meta {
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.red {
+  background: #f9d8dc;
+  border-left: 6px solid #dc3545;
+}
+.yellow {
+  background: #fff1c9;
+  border-left: 6px solid #f3c221;
+}
+.green {
+  background: #d9f2dc;
+  border-left: 6px solid #28a745;
+}
+main {
+  flex: 1;
+  padding-left: 300px;  /* sidebar (200) + menu-bar fechado (100 arredondado) */
+  padding-top: 89px;
+  padding-right: 40px;
+  transition: padding-left 0.3s ease;
+}
+#toggleMenu:checked ~ .menu-bar ~ main {
+  padding-left: 430px; /* sidebar (200) + menu-bar expandido (230) */
+}
+/* ====== RODAPÉ ====== */
+.footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #5d73da;
+  color: #fff;
+  text-align: center;
+  padding: 8px 12px;
+  font-weight: 600;
+}
+
+/* ====== RESPONSIVO ====== */
+@media (max-width: 1200px) {
+  .menu-panel {
+    left: 450px;
+    width: 330px;
+  }
+  .dashboard {
+    grid-template-columns: 250px 1px 1fr;
+  }
+}
+
+@media (max-width: 992px) {
+  .sidebar {
+    width: 200px;
+  }
+  .topbar {
+    left: 200px;
+  }
+  .menu-bar {
+    left: 200px;
+  }
+  .menu-panel {
+    left: 420px;
+  } /* 200 + 210 + 10 */
+  .dash-wrap {
+    padding-left: 200px;
+  }
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+  .divider {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 72px;
+    border-radius: 0 24px 24px 0;
+    padding: 14px 6px;
+  }
+  .sidebar .logo {
+    width: 56px;
+    margin: 0 0 10px;
+  }
+  .sidebar a p {
+    display: none;
+  }
+  .sidebar a {
+    justify-content: center;
+    padding: 10px 0;
+  }
+
+  .topbar {
+    left: 72px;
+  }
+  .menu-bar {
+    left: 72px;
+    width: 140px;
+    gap: 16px;
+  }
+  /* menu secundário vira overlay full-width */
+  .menu-panel {
+    left: 0;
+    right: 0;
+    top: 72px;
+    width: auto;
+    margin: 0 10px;
+    border-radius: 18px;
+  }
+  .dash-wrap {
+    padding-left: 72px;
+    padding-right: 10px;
+  }
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-bar {
+    top: 84px;
+    width: 120px;
+  }
+  .topbar h1 {
+    font-size: 18px;
+  }
+  .userbox span {
+    display: none;
+  }
+  .dashboard {
+    padding: 16px;
+  }
+}
+/* ===== LINHAS DIVISÓRIAS ENTRE COLUNAS ===== */
+.dashboard {
+  border-left: 1px solid #dcdde7;
+  border-top: 1px solid #dcdde7;
+}
+.dashboard-left {
+  border-right: 3.5px solid #dcdde7;
+  padding-right: 14px;
+}
+.dashboard-right {
+  padding-left: 14px;
+}
+
+.divider {
+  border: none;                /* remove borda padrão */
+  border-top: 3.5px solid #dcdde7; /* linha horizontal */
+  width: 100%;               /* ocupa toda a largura disponível */
+  border-radius: 2px;          /* borda levemente arredondada */
+}
+/* ===== LISTA DE STATUS ===== */
+.status-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* espaço entre os cards */
+}
+
+.status-item {
+  background: #d4d0d0;        /* fundo cinza */
+  border-radius: 8px;         /* bordas arredondadas */
+  padding: 10px 12px;         /* espaçamento interno */
+  display: flex;              /* coloca bolinha e texto na mesma linha */
+  align-items: center;        /* alinha verticalmente */
+  font-weight: bold;          /* texto mais destacado */
+  box-shadow: 0 3px 6px rgba(0,0,0,0.08); /* sombra leve */
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 10px;
+  flex-shrink: 0; /* impede a bolinha de encolher */
+}

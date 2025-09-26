@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="cadastro.css" />
+  <title>Dashboard de Gerenciamento</title>
+  <style>
+    :root {
+      --azul: #354a9b;
+      --azul-escuro: #2c3e91;
+      --bg: #dbe2f0;
+      --white: #fff;
+      --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ====== SIDEBAR ====== */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 200px;
+      background: var(--azul);
+      border-top-right-radius: 40px;
+      border-bottom-right-radius: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 10px;
+      color: #fff;
+    }
+    .sidebar img {
+      margin-bottom: 20px;
+    }
+    .sidebar a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: #fff;
+      margin: 20px 0;
+    }
+    .sidebar a img {
+      width: 36px;
+      height: 36px;
+      margin-bottom: 6px;
+    }
+
+    /* ====== MENU SECUNDÁRIO ====== */
+    .menu-bar {
+      position: fixed;
+      top: 100px; /* Alinha o menu ao topo */
+      left: 180px; /* Posiciona o menu 200px da esquerda, após a sidebar */
+      height: 65%; /* Ocupa 100% da altura da tela */
+      width: 120px; /* Define a largura do menu */
+      background: #fff;
+      border-radius: 20px;
+      padding: 20px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+      box-shadow: var(--card-shadow);
+      z-index: 98; /* Adicionado z-index para garantir visibilidade */
+    }
+    .menu-bar img {
+      width: 28px;
+      height: 28px;
+    }
+
+    /* ====== HEADER ====== */
+    header {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 60px;
+      background: #5d73da;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 20px;
+      font-weight: bold;
+      z-index: 99;
+    }
+    header img {
+      width: 32px;
+      height: 32px;
+    }
+
+    /* ====== CONTEÚDO ====== */
+    main {
+      flex: 1;
+      padding-left: 350px; /* espaço sidebar + menu-bar */
+      padding-top: 80px;
+      padding-right: 40px;
+    }
+    .dashboard-title {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .dashboard {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 20px;
+    }
+    .dashboard-left {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .dashboard-left button {
+      background: var(--azul);
+      color: #fff;
+      border: 0;
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .dashboard-left button:hover {
+      background: var(--azul-escuro);
+    }
+
+    .dashboard-right {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .denuncia {
+      border-radius: 14px;
+      padding: 14px 16px;
+    }
+    .red {
+      background: #f9d8dc;
+      border-left: 6px solid #dc3545;
+    }
+    .yellow {
+      background: #fff1c9;
+      border-left: 6px solid #f3c221;
+    }
+    .green {
+      background: #d9f2dc;
+      border-left: 6px solid #28a745;
+    }
+
+    /* ====== FOOTER ====== */
+    .footer {
+      background: #5d73da;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+      font-weight: 600;
+    }
+
+    /* ====== RESPONSIVO ====== */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 72px;
+      }
+      .sidebar a p {
+        display: none;
+      }
+      .menu-bar {
+        left: 90px;
+      }
+      main {
+        padding-left: 180px;
+      }
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <img src="assets/imgs/logo.png" alt="Logotipo VoyageBus" width="120">
+    <a href="#" class="active">
+    <img src="assets/imgs/Register_User.png">
+    <p>Cadastrar</p>
+  </a>
+
+  <a href="#">
+    <img src="assets/imgs/Complaint.png">
+    <p>Denúncias</p>
+  </a>
+
+  <a href="config.html" class="button">
+    <img src="assets/imgs/Settings.png">
+    <p>Configurações</p>
+  </a>
+  </aside>
+
+  <input type="checkbox" id="toggleMenu" hidden>
+  <nav class="menu-bar">
+    <label for="toggleMenu" class="menu-toggle">
+      <img src="assets/imgs/menu.png" alt="Menu"><a href="#"><alt="Menu"><p>Menu</p></a>
+    </label>
+    <a href="#"><img src="assets/imgs/admin_panel_settings.png" alt="Segurança"><p>Cadastrar Administrador</p></a>
+    
+    <a href="#"><img src="assets/imgs/user_header.png" alt="Usuário"><p>Cadastrar Motorista</p></a>
+  </nav>
+
+  <header>
+    <span>GESSIKA LOPES - ADM</span>
+    <a href="#"><img src="assets/imgs/user_header.png" alt="User"></a>
+    <div class="user-circle"></div>
+  </header>
+
+  <main>
+    <h1 class="dashboard-title">Dashboard de Gerenciamento</h1>
+    <div class="dashboard">
+      <div class="dashboard-left">
+  <div class="status-list">
+    <div class="status-item">
+      <span class="dot red-dot"></span>
+      <p>120 novas denúncias</p>
+    </div>
+    <div class="status-item">
+      <span class="dot orange-dot"></span>
+      <p>780 denúncias em andamento</p>
+    </div>
+    <div class="status-item">
+      <span class="dot yellow-dot"></span>
+      <p>5 denúncias visualizadas</p>
+    </div>
+    <div class="status-item">
+      <span class="dot green-dot"></span>
+      <p>780 denúncias resolvidas</p>
+    </div>
+  </div>
+
+
+<hr class="divider"> 
+
+  <button>ATUALIZAR DASHBOARD</button>
+  <button>APROVAR/REJEITAR</button>
+  <button>CRIAR AVISO INTERNO</button>
+</div>
+
+      <div class="dashboard-right">
+        <div class="denuncia red">
+          <strong>USUÁRIO:</strong> João Vasconcelos<br>
+          <strong>OCORRÊNCIA:</strong> Na 18:53 estava prestes a subir no ônibus, quando abordado.<br>
+          <strong>ONDE OCORREU:</strong> Na rodoviária.<br>
+        </div>
+        <div class="denuncia yellow">
+          <strong>USUÁRIO:</strong> Bianca Juliete<br>
+          <strong>OCORRÊNCIA:</strong> Na área de partida de 12 a 02 estava.<br>
+          <strong>ONDE OCORREU:</strong> Dentro do ônibus.<br>
+        </div>
+        <div class="denuncia green">
+          <strong>USUÁRIO:</strong> Mona Ivete<br>
+          <strong>OCORRÊNCIA:</strong> Próximo às docas 12 e 2 estava.<br>
+          <strong>ONDE OCORREU:</strong> Na rodoviária.<br>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">©2025 Todos os direitos reservados para Tech Seul</footer>
+</body>
+</html>
