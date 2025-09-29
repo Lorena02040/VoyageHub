@@ -1,0 +1,80 @@
+{
+  "padrao": {
+    "titulo": "Dashboard de Gerenciamento",
+    "cards": [
+      {
+        "tipo": "status",
+        "cor": "red",
+        "texto": "120 novas denúncias"
+      },
+      {
+        "tipo": "status",
+        "cor": "orange",
+        "texto": "780 denúncias em andamento"
+      },
+      {
+        "tipo": "status",
+        "cor": "yellow",
+        "texto": "5 denúncias visualizadas"
+      },
+      {
+        "tipo": "status",
+        "cor": "green",
+        "texto": "780 denúncias resolvidas"
+      }
+    ],
+    "acoes": [
+      "ATUALIZAR DASHBOARD",
+      "APROVAR/REJEITAR",
+      "CRIAR AVISO INTERNO"
+    ],
+    "denuncias": [
+      {
+        "nome": "João Vasconcelos",
+        "ocorrencia": "Na 18:53 estava prestes a subir no ônibus, quando abordado.",
+        "local": "Na rodoviária",
+        "cor": "red"
+      },
+      {
+        "nome": "Bianca Juliete",
+        "ocorrencia": "Na área de partida de 12 a 02 estava.",
+        "local": "Dentro do ônibus",
+        "cor": "yellow"
+      },
+      {
+        "nome": "Mona Ivete",
+        "ocorrencia": "Próximo às docas 12 e 2 estava.",
+        "local": "Na rodoviária",
+        "cor": "green"
+      }
+    ]
+  },
+  "config": {
+    "titulo": "Configurações",
+    "cards": [
+      {
+        "tipo": "config",
+        "titulo": "Configurações Gerais",
+        "conteudo": "Aqui você pode alterar as configurações do sistema."
+      }
+    ]
+  },
+  "admin": {
+    "titulo": "Cadastrar Administrador",
+    "cards": [
+      {
+        "tipo": "form",
+        "conteudo": "Formulário de cadastro de administrador"
+      }
+    ]
+  },
+  "motorista": {
+    "titulo": "Cadastrar Motorista",
+    "cards": [
+      {
+        "tipo": "form",
+        "conteudo": "Formulário de cadastro de motorista"
+      }
+    ]
+  }
+}

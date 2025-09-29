@@ -1,0 +1,299 @@
+/* ===== VARIÁVEIS GLOBAIS ===== */
+:root {
+  --azul: #354a9b;             /* Cor principal do site / sidebar */
+  --azul-escuro: #2c3e91;      /* Tom mais escuro para hover e destaques */
+  --bg: #dbe2f0;               /* Cor de fundo da página */
+  --white: #fff;               /* Cor branca global */
+  --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Sombra para cards e menus */
+}
+
+/* ===== RESET E PADRÕES ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== SIDEBAR PRINCIPAL (Menu Azul da Esquerda) ===== */
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 200px;
+  background: var(--azul);
+  color: #fff;
+  border-top-right-radius: 40px;
+  border-bottom-right-radius: 40px;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 20px 10px;
+  z-index: 100;
+}
+.sidebar .logo {
+  width: 150px; height: auto; margin: 6px 0 24px;
+}
+.sidebar a {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 16px;
+  color: #fff; 
+  text-decoration: none;
+  border-radius: 14px;
+  transition: 0.2s;
+  font-weight: bold; 
+  margin-bottom: 30px; 
+}
+.sidebar a:last-of-type {
+    margin-bottom: 0;
+}
+.sidebar a img {
+  width: 40px; height: 40px; object-fit: contain;
+}
+.sidebar a:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ===== ITEM ATIVO NA SIDEBAR (Card Cinza) ===== */
+.sidebar a.active {
+  background: #6a6a6a;          
+  color: var(--white);           
+  box-shadow: var(--card-shadow);
+  padding: 24px 16px; 
+  margin-bottom: 30px; 
+  filter: none;
+}
+.sidebar a.active img { filter: none; }
+
+/* ===== HEADER ===== */
+header {
+  position: fixed; left: 0; right: 0; top: 0;
+  height: 60px;
+  background: #5d73da;
+  color: #fff;
+  display: flex; align-items: center; justify-content: flex-end;
+  padding: 0 20px;
+  font-weight: bold;
+  z-index: 99;
+}
+header img { width: 32px; height: 32px; }
+header span { margin-right: 10px; }
+.user-circle { width: 34px; height: 34px; border-radius: 50%; background: #fff; }
+
+/* ===== MENU SECUNDÁRIO (Funcionalidade de Toggle Restaurada) ===== */
+.menu-bar {
+  position: fixed; 
+  top: 170px;
+  left: 180px; 
+  width: 100px; 
+  height: 250px;
+  
+  background: var(--white);
+  border-radius: 20px;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; 
+  gap: 10px; 
+  box-shadow: var(--card-shadow);
+  z-index: 90;
+  
+  transition: width 0.3s ease, padding 0.3s ease;
+}
+
+/* Estilo do botão de toggle */
+.menu-toggle {
+    display: flex; 
+    align-items: center; 
+    justify-content: flex-start; 
+    cursor: pointer;
+    width: 100%; 
+    padding: 10px 15px; 
+    gap: 12px;
+}
+.menu-toggle img { width: 28px; height: 28px; }
+
+/* Esconde o texto por padrão (quando colapsado) */
+.menu-bar a p, .menu-toggle p {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.1s;
+}
+
+/* Configurações dos links */
+.menu-bar a {
+  justify-content: flex-start; 
+  padding: 10px 35px; 
+  width: 100%;
+  color: #333;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+.menu-bar a:hover { background-color: #f0f0f0; }
+.menu-bar a img { width: 28px; height: 28px; } 
+
+/* Estilo para o item ativo no menu secundário */
+.menu-bar a.active-sub {
+    background-color: #f0f0f0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* QUANDO O CHECKBOX É MARCADO (MENU ABERTO) */
+#toggleMenu:checked ~ .menu-bar {
+    width: 280px; 
+    align-items: flex-start; 
+    padding: 16px;
+}
+#toggleMenu:checked ~ .menu-bar a,
+#toggleMenu:checked ~ .menu-bar .menu-toggle {
+    justify-content: flex-start; 
+    padding: 10px 35px; 
+}
+/* Mostra os textos quando expandido */
+#toggleMenu:checked ~ .menu-bar a p, 
+#toggleMenu:checked ~ .menu-bar .menu-toggle p {
+    display: block; 
+    opacity: 1;
+}
+
+/* ===== CONTEÚDO PRINCIPAL (Formulário) - AJUSTES DE POSIÇÃO E VISIBILIDADE ===== */
+main {
+  flex: 1;
+  padding-top: 80px; 
+  padding-right: 40px;
+  background-color: var(--bg); 
+  position: relative; 
+  
+  /* PADDING INICIAL (COLAPSADO) */
+  padding-left: 350px; 
+  
+  transition: padding-left 0.3s ease;
+}
+
+/* MOVIMENTA O CONTEÚDO PRINCIPAL QUANDO O MENU EXPANDIR */
+#toggleMenu:checked ~ .menu-bar ~ main {
+    padding-left: 500px; 
+}
+
+/* --- VISIBILIDADE DOS FORMULÁRIOS --- */
+
+/* 1. Oculta o formulário de Administrador (Antigo - Mantenha oculto) */
+#dashboard-admin-content {
+    display: none !important;
+}
+
+/* 2. Exibe e posiciona o FORMULÁRIO DE MOTORISTA (NOVO - Exibir e posicionar) */
+#dashboard-motorista-content {
+    /* POSIÇÃO INICIAL (COLAPSADO) */
+    position: absolute;
+    left: 330px; 
+    top: 100px;
+    width: calc(100% - 370px); 
+    
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
+    padding: 30px;
+    display: block !important; /* FORÇA A VISIBILIDADE */
+    
+    transition: left 0.3s ease, width 0.3s ease;
+}
+
+/* MOVIMENTA O CARD QUANDO O MENU EXPANDIR */
+#toggleMenu:checked ~ .menu-bar ~ main #dashboard-motorista-content {
+    left: 500px;
+    width: calc(100% - 540px); 
+}
+
+/* --- ESTILOS DO FORMULÁRIO (Compartilhados) --- */
+.form-title {
+    font-size: 2.2em; font-weight: 700; margin-bottom: 30px;
+}
+.form-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px;
+}
+.form-placeholder {
+    height: 60px; background-color: #cdd9ff; border-radius: 12px; padding: 18px 20px;
+    color: var(--azul-escuro); font-size: 1.1em; font-weight: bold; display: flex;
+    align-items: center; justify-content: space-between;
+}
+.form-placeholder.credencial {
+    display: flex; justify-content: space-between; align-items: center;
+}
+.refresh-icon {
+    width: 34px; height: 34px; background-color: var(--azul-escuro); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.form-button {
+    background-color: var(--azul); color: var(--white); border: none; padding: 16px 40px;
+    border-radius: 10px; font-size: 1.2em; font-weight: bold; cursor: pointer;
+    transition: 0.2s; margin-top: 30px; float: left;
+}
+.form-button:hover { background-color: var(--azul-escuro); }
+.credential-note {
+    font-size: 0.9em; text-align: right; color: #444; margin-top: 20px; line-height: 1.5;
+    overflow: hidden; 
+}
+.credential-note strong { font-weight: bold; color: #000; }
+
+/* Oculta dashboards e placeholders antigos */
+.dashboard-title, #dashboard-container, .dashboard, #configuracoes-content, .main-title {
+    display: none !important;
+}
+
+/* ===== RODAPÉ ===== */
+.footer { 
+  position: fixed; 
+  left:0; right:0; 
+  bottom:0; 
+  background:#5d73da; 
+  color:#fff; 
+  text-align:center; 
+  padding:8px 12px; 
+  font-weight:600; 
+  z-index: 90;
+}
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 1200px) {
+    /* Estado Colapsado */
+    main { padding-left: 300px; }
+    #dashboard-motorista-content { left: 330px; width: calc(100% - 370px); } 
+    .menu-bar { left: 210px; }
+    .sidebar a { padding: 14px 16px; margin-bottom: 20px;} 
+    .sidebar a.active { padding: 20px 16px; margin-bottom: 20px; } 
+
+    /* Estado Expandido */
+    #toggleMenu:checked ~ .menu-bar ~ main { padding-left: 450px; }
+    #toggleMenu:checked ~ .menu-bar ~ main #dashboard-motorista-content {
+        left: 450px;
+        width: calc(100% - 490px);
+    }
+}
+
+@media (max-width: 768px) {
+  .sidebar { width: 72px; padding: 14px 6px; }
+  .sidebar a { justify-content: center; padding: 10px 0; gap: 4px; margin-bottom: 10px; }
+  .sidebar a.active { padding: 14px 0; margin-bottom: 10px; }
+  .menu-bar { left: 90px; width: 60px; padding: 10px 0; }
+  .menu-toggle p { display: none !important; }
+
+  main { padding-left: 200px; padding-top: 70px; padding-right: 15px; }
+  #dashboard-motorista-content { 
+      left: 170px; 
+      width: calc(100% - 190px); 
+      padding: 20px;
+      margin-top: 80px;
+  }
+  .form-grid { grid-template-columns: 1fr; gap: 20px; } 
+  .form-button { float: none; width: 100%; }
+  .credential-note { text-align: center; margin-top: 20px; }
+}

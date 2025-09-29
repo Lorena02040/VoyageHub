@@ -1,0 +1,319 @@
+/* ===== VARIÁVEIS GLOBAIS ===== */
+:root {
+  --azul: #354a9b;             /* Cor principal do site / sidebar */
+  --azul-escuro: #2c3e91;      /* Tom mais escuro para hover e destaques */
+  --bg: #dbe2f0;               /* Cor de fundo da página */
+  --white: #fff;                /* Cor branca global */
+  --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Sombra para cards e menus */
+}
+
+/* ===== RESET E PADRÕES ===== */
+* {
+  box-sizing: border-box;       /* Inclui padding e border no tamanho total do elemento */
+  margin: 0;                    /* Remove margens padrão do navegador */
+  padding: 0;                   /* Remove padding padrão do navegador */
+}
+body {
+  font-family: Arial, sans-serif; /* Fonte legível e padrão */
+  background: var(--bg);          /* Cor de fundo global */
+  height: 100vh;                  /* Altura total da tela */
+  display: flex;                  /* Layout flexível vertical */
+  flex-direction: column;         /* Filhos em coluna */
+}
+
+/* ===== SIDEBAR PRINCIPAL (Menu Azul da Esquerda) ===== */
+.sidebar {
+  position: fixed;                /* Fixa a sidebar na tela */
+  inset: 0 auto 0 0;              /* top 0, bottom 0, left 0, right auto */
+  width: 200px;                    /* Largura da sidebar */
+  background: var(--azul);         /* Fundo azul */
+  color: #fff;                     /* Texto branco */
+  border-top-right-radius: 40px;   /* Arredonda canto superior direito */
+  border-bottom-right-radius: 40px;/* Arredonda canto inferior direito */
+  display: flex; flex-direction: column; align-items: center; /* Layout interno */
+  padding: 20px 10px;             /* Espaçamento interno */
+  z-index: 100;                    /* Sobre outros elementos */
+}
+/* Logo dentro da sidebar */
+.sidebar .logo {
+  width: 150px; height: auto; margin: 6px 0 24px; /* Tamanho da logo e espaçamento */
+}
+/* Links da sidebar - Layout antigo (ícone e texto em coluna) */
+.sidebar a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #fff;
+  margin: 20px 0;
+  padding: 10px 0; /* Ajustado para espaçamento */
+}
+.sidebar a img {
+  width: 36px;
+  height: 36px;
+  margin-bottom: 6px;
+}
+/* Hover nos links da sidebar */
+.sidebar a:hover {
+  background: rgba(255, 255, 255, 0.08); /* Fundo levemente branco ao passar o mouse */
+  border-radius: 14px;
+}
+
+/* ===== HEADER (Topo) ===== */
+header {
+  position: fixed; left: 0; right: 0; top: 0;
+  height: 60px;
+  background: #5d73da;
+  color: #fff;
+  display: flex; align-items: center; justify-content: flex-end;
+  padding: 0 20px;
+  font-weight: bold;
+  z-index: 99;
+}
+header img { width: 32px; height: 32px; }
+header span { margin-right: 10px; }
+.user-circle { width: 34px; height: 34px; border-radius: 50%; background: #fff; }
+
+/* ===== ITEM SELECIONADO NA SIDEBAR ===== */
+.sidebar a.active {
+  background: rgba(255, 255, 255, 0.15); /* Fundo do item ativo para dar destaque */
+  border-radius: 14px;
+}
+.sidebar a.active p {
+  font-weight: bold;
+}
+
+/* ===== MENU SECUNDÁRIO (Cartão Branco com Links de Gerenciamento) ===== */
+.menu-bar {
+  position: fixed;
+  top: 100px;
+  /* MUDANÇA 1: Aproxima o menu-bar da sidebar (200px - 10px de sobreposição) */
+  left: 190px; 
+  width: 280px; 
+  height: auto;
+  background: var(--white);
+  border-radius: 20px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; 
+  gap: 10px; 
+  box-shadow: var(--card-shadow);
+  z-index: 90;
+}
+/* Título "MENU" com ícone */
+.menu-bar h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #333;
+    font-weight: bold;
+}
+.menu-bar h3 img {
+    width: 24px;
+    height: 24px;
+}
+/* Estilo dos links dentro do menu secundário */
+.menu-bar a {
+  width: 100%;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #333;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+  white-space: nowrap; 
+}
+.menu-bar a:hover {
+  background-color: #f0f0f0;
+}
+.menu-bar a img {
+  width: 24px;
+  height: 24px;
+}
+.menu-bar a p {
+    display: inline; 
+    font-weight: 500;
+}
+.menu-toggle { display: none !important; }
+
+/* ===== CONTEÚDO PRINCIPAL (Área do Dashboard) ===== */
+main {
+  flex: 1;
+  /* Ajusta o padding-left para levar em conta a nova posição do menu e o espaço do título */
+  padding-left: 50px; 
+  padding-top: 80px; 
+  padding-right: 40px;
+  background-color: var(--bg); 
+  position: relative; 
+}
+
+/* O TÍTULO "Configurações" (FORA DO CARD BRANCO) */
+.main-title {
+    position: absolute; 
+    left: 500px; 
+    top: 100px; 
+    font-size: 2.2em;
+    font-weight: 700;
+    color: #333; 
+    z-index: 1; 
+}
+
+/* Estilo do Cartão Principal de Configurações */
+#configuracoes-content {
+    position: absolute; 
+    left: 500px;
+    top: 160px;
+    
+    /* MUDANÇA 2: Reduz a largura (subtrai mais para a direita ficar com mais margem) */
+    width: calc(100% - 640px); 
+    /* MUDANÇA 2: Reduz a altura mínima */
+    min-height: 50vh; 
+    
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
+    padding: 30px;
+}
+
+/* Remove qualquer h2 dentro do #configuracoes-content que possa ter sido gerado antes */
+#configuracoes-content h2 {
+    display: none; 
+}
+
+/* Esconde o dashboard antigo */
+.dashboard { display: none; } 
+.dashboard-title { display: none; } 
+
+
+/* ===== RODAPÉ ===== */
+.footer { position: fixed; left:0; right:0; bottom:0; background:#5d73da; color:#fff; text-align:center; padding:8px 12px; font-weight:600; }
+
+/* ===== RESPONSIVO (É importante ajustar o responsivo também após as mudanças!) ===== */
+@media (max-width: 1200px) {
+    main { padding-left: 350px; }
+    .main-title { left: 350px; }
+    /* Ajuste responsivo para a largura do card */
+    #configuracoes-content { left: 350px; width: calc(100% - 390px); } 
+    /* Ajuste responsivo para a nova posição do menu */
+    .menu-bar { left: 180px; width: 140px; } 
+    .menu-bar h3 p { display: none; }
+}
+
+@media (max-width: 992px) {
+  .sidebar { width: 72px; border-radius: 0 24px 24px 0; padding: 14px 6px; }
+  .sidebar .logo { width: 56px; margin: 0 0 10px; }
+  .sidebar a p { display: none; } 
+  .sidebar a { justify-content: center; padding: 10px 0; }
+
+  .header { left: 72px; }
+
+  .menu-bar {
+    left: 70px; /* Sobrepõe a sidebar colapsada */
+    width: 250px; 
+    top: 80px; 
+    height: auto;
+  }
+  .menu-bar h3 { font-size: 1em; }
+  .menu-bar a { padding: 8px 10px; }
+  .menu-bar a img { width: 20px; height: 20px; }
+  .menu-bar a p { font-size: 0.9em; display: inline; } 
+
+  main {
+    padding-left: 340px; 
+    padding-top: 80px;
+    padding-right: 20px;
+  }
+  .main-title { left: 340px; top: 80px; font-size: 1.8em;}
+  #configuracoes-content {
+    left: 340px;
+    top: 140px; 
+    width: calc(100% - 360px); 
+    padding: 20px;
+    min-height: 50vh;
+  }
+}
+
+@media (max-width: 768px) {
+    .sidebar { width: 72px; border-radius: 0 24px 24px 0; padding: 14px 6px; }
+    .sidebar .logo { width: 56px; margin: 0 0 10px; }
+    .sidebar a p { display: none; }
+    .sidebar a { justify-content: center; padding: 10px 0; }
+
+    .header { left: 72px; }
+
+    .menu-bar {
+      left: 70px; 
+      width: 60%; 
+      max-width: 200px; 
+      height: auto;
+      top: 80px; 
+      padding: 10px;
+      gap: 8px;
+    }
+    .menu-bar h3 { font-size: 1em; margin-bottom: 5px; }
+    .menu-bar h3 img { width: 20px; height: 20px; }
+    .menu-bar a { padding: 6px 8px; }
+    .menu-bar a img { width: 18px; height: 18px; }
+    .menu-bar a p { font-size: 0.8em; }
+
+    main {
+      padding-left: 280px; 
+      padding-top: 70px; 
+      padding-right: 15px;
+    }
+    .main-title { left: 280px; top: 70px; font-size: 1.6em; }
+    #configuracoes-content {
+      left: 280px;
+      top: 120px;
+      width: calc(100% - 300px);
+      padding: 15px;
+      min-height: 40vh; /* Ajustado para telas menores */
+    }
+}
+
+
+@media (max-width: 480px) {
+  .sidebar { width: 60px; padding: 10px 4px; }
+  .sidebar .logo { width: 40px; margin-bottom: 5px; }
+  .sidebar a { margin: 10px 0; padding: 8px 0; }
+  .sidebar a img { width: 28px; height: 28px; }
+
+  .header { left: 60px; padding: 0 10px; }
+  .header span { display: none; } 
+  .user-circle { width: 28px; height: 28px; }
+
+  .menu-bar {
+    left: 55px; /* Sobreposição ainda maior para telas muito pequenas */
+    width: 60%;
+    max-width: 150px;
+    top: 65px;
+    padding: 8px;
+    gap: 5px;
+  }
+  .menu-bar h3 { font-size: 0.9em; margin-bottom: 3px; }
+  .menu-bar h3 img { width: 16px; height: 16px; }
+  .menu-bar a { padding: 4px 6px; gap: 8px; }
+  .menu-bar a img { width: 16px; height: 16px; }
+  .menu-bar a p { font-size: 0.7em; }
+
+  main {
+    padding-left: 230px;
+    padding-top: 60px;
+    padding-right: 10px;
+  }
+  .main-title { left: 230px; top: 60px; font-size: 1.4em; }
+  #configuracoes-content {
+    left: 230px;
+    top: 100px;
+    width: calc(100% - 240px);
+    padding: 10px;
+    min-height: 30vh; /* Ajustado para telas muito pequenas */
+  }
+
+  .footer { font-size: 0.8em; padding: 6px 8px; }
+}
