@@ -76,7 +76,7 @@ header span { margin-right: 10px; }
 
 /* ===== ITEM SELECIONADO NA SIDEBAR ===== */
 .sidebar a.active {
-  background: rgba(255, 255, 255, 0.15); /* Fundo do item ativo para dar destaque */
+  background: #f0f0f045; /* Fundo do item ativo para dar destaque */
   border-radius: 14px;
 }
 .sidebar a.active p {

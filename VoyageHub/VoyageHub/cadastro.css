@@ -154,7 +154,7 @@ header span {
 
 /* ====== ESTILO ITEM SELECIONADO ====== */
 .sidebar a.active {
-  background: #7d7e80;                  /* card branco atrás */
+  background: #f0f0f045;                  /* card branco atrás */
   color: var(--azul);                /* texto e ícone ficam azuis */
   box-shadow: var(--card-shadow);
   font-weight: bold;
