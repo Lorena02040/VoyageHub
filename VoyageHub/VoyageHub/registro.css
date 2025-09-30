@@ -147,7 +147,8 @@ header span {
 }
 .menu-bar a {
   justify-content: flex-start;
-  padding: 10px 35px;
+  padding-left: 15px;
+  padding: 10px 30px;
   width: 100%;
   color: #333;
   text-decoration: none;
@@ -174,7 +175,7 @@ header span {
 #toggleMenu:checked ~ .menu-bar a,
 #toggleMenu:checked ~ .menu-bar .menu-toggle {
   justify-content: flex-start;
-  padding: 10px 35px;
+  padding: 10px 30px;
 }
 #toggleMenu:checked ~ .menu-bar a p,
 #toggleMenu:checked ~ .menu-bar .menu-toggle p {
@@ -184,39 +185,37 @@ header span {
 
 /* ====== ÁREA DE CONTEÚDO PRINCIPAL ====== */
 .content-area {
-    /* Define o espaço que o conteúdo ocupa, descontando os menus fixos */
+    /* CORREÇÃO: Padding esquerdo aumentado para acomodar os dois menus e criar uma margem. */
     padding-left: 370px; /* sidebar(250) + menu-bar(80) + espaço(40) */
-    padding-top: 60px;
-    padding-right: 30px;
-    padding-bottom: 60px;
+   
+    /* AJUSTE: Aumentado o padding superior para um respiro visual */
+    padding-top: 90px;  /* Altura do topbar (70px) + 20px de margem */
+   
+    padding-right: 40px;
+    padding-bottom: 80px; /* Espaço para o footer */
 }
  
-/* Cabeçalho de dentro da página (com título e busca) */
+/* CABEÇALHO DO DASHBOARD (TÍTULO E PESQUISA) */
 .dashboard-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 0;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
  
 .dashboard-header h1 {
     font-size: 24px;
+    font-weight: 700;
     color: #333;
-    font-weight: bold;
-}
- 
-.search-filter {
-    display: flex;
-    gap: 10px;
-    align-items: center;
 }
  
 .search-box {
     display: flex;
     border-radius: 8px;
     overflow: hidden;
-    background: #cdd6e8;
+    background-color: var(--white);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border: 1px solid #ddd;
 }
  
 .search-box input {
@@ -229,36 +228,25 @@ header span {
  
 .search-box input::placeholder {
     color: var(--azul);
-    font-weight: bold;
+    font-weight: 500;
 }
  
 .search-box button {
     background: var(--azul);
     border: none;
-    padding: 8px 12px;
+    padding: 0 15px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
 }
  
-.search-box button img {
-    width: 20px;
-    height: 20px;
-    filter: brightness(0) invert(1);
+.search-box button i {
+    color: var(--white);
+    font-size: 16px;
 }
  
-.filter-btn {
-    background: #cdd6e8;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-weight: bold;
-    color: var(--azul);
-}
- 
-/* Container branco para as denúncias */
+/* CONTAINER BRANCO E GRID DE CARDS */
 .dashboard-content {
     background: var(--white);
     border-radius: 18px;
@@ -268,69 +256,77 @@ header span {
  
 .dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 20px;
 }
  
-.denuncia {
-    border-radius: 14px;
-    padding: 14px 16px;
-    line-height: 1.5;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
- 
-.denuncia header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #333;
-}
- 
-.denuncia header .meta {
-    margin-left: auto;
-    font-size: 12px;
-    opacity: 0.75;
-    font-weight: normal;
-}
- 
-.denuncia p {
+.loss-card {
+    background-color: #fef6f6; /* Fundo rosa bem claro */
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #fde2e2; /* Borda rosa claro */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.04);
     font-size: 14px;
 }
  
-.red {
-    background: #fde8e8;
-    border-top: 4px solid #e57373;
+.loss-card header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    color: #4B5563;
 }
  
-.yellow {
-    background: #fff8e1;
-    border-top: 4px solid #ffd54f;
+.loss-card .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: #6B7280;
+    flex-shrink: 0;
+    margin-left: 10px;
 }
  
-/* ====== RESPONSIVO PARA O CONTEÚDO ====== */
+.loss-card .status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #ef4444; /* Vermelho */
+}
+ 
+.loss-card .card-body p {
+    margin-bottom: 5px;
+    color: #374151;
+}
+ 
+.loss-card strong {
+    color: #111827;
+}
+ 
+ 
+/* ====== RESPONSIVO ====== */
 @media (max-width: 992px) {
     .content-area {
-        padding-left: 152px; /* 72px (sidebar) + 80px (menu-bar) */
-    }
- 
-    .dashboard-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
+        /* CORREÇÃO: sidebar(72) + menubar(80) + espaço(20) = 172px */
+        padding-left: 172px;
     }
 }
  
 @media (max-width: 768px) {
     .content-area {
-        padding-left: 92px; /* 72px (sidebar) + 20px de margem */
+        /* sidebar(72) + espaço(20) = 92px */
+        padding-left: 92px;
+        padding-right: 20px;
     }
- 
-    .dashboard-grid {
-        grid-template-columns: 1fr;
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .search-box {
+        width: 100%;
     }
 }
-
 
 
 /* ===== RODAPÉ ===== */

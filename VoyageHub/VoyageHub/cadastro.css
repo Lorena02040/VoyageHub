@@ -231,6 +231,12 @@ header span {
   border-bottom: none;
 }
 
+/* Garante alinhamento central do menu-bar sempre */
+.menu-bar,
+#toggleMenu:checked ~ .menu-bar {
+  align-items: center;
+}
+
 /* ====== CONTEÚDO CENTRAL ====== */
 .dashboard {
   /* Estas propriedades já estão no seu código */
