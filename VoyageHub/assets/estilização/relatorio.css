@@ -1,0 +1,313 @@
+/* ================================================================== */
+/* *** ARQUIVO CSS COMPLETO E CORRIGIDO *** */
+/* ================================================================== */
+
+/* ===== VARIÁVEIS GLOBAIS ===== */
+:root {
+  --azul: #354a9b;
+  --azul-escuro: #2c3e91;
+  --bg: #dbe2f0;
+  --white: #fff;
+  --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== RESET E PADRÕES ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  padding-bottom: 150px;
+}
+
+.menu-toggle .fa-bars {
+  color: var(--azul); /* Define a cor azul do seu projeto */
+  font-size: 28px;   /* Ajusta o tamanho se necessário */
+}
+
+/* ====== SIDEBAR PRINCIPAL ====== */
+.sidebar {
+  position: fixed;
+  width: 200px;
+  background: var(--azul);
+  color: #fff;
+  padding: 20px 10px;
+  border-top-right-radius: 40px;
+  border-bottom-right-radius: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 101;
+}
+.sidebar .logo {
+  width: 150px;
+  height: auto;
+  margin: 6px 0 24px;
+}
+.sidebar a {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 16px;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 14px;
+  transition: 0.2s;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+.sidebar a:last-of-type {
+  margin-bottom: 0;
+}
+.sidebar a img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+.sidebar a:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+
+/* ====== HEADER ====== */
+header {
+  position: fixed;
+  width: calc(100% - 200px); /* <<-- ALTERADO: Ocupa o resto da tela */
+  top: 0;
+  width: 100%;
+  height: 60px;
+  background: #5d73da;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 30px;
+  font-weight: bold;
+  z-index: 100;
+  transition: left 0.3s ease;
+}
+header img {
+  width: 32px;
+  height: 32px;
+}
+header span {
+  margin-right: 10px;
+}
+.user-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+/* ====== MENU SECUNDÁRIO ====== */
+.menu-bar {
+  position: fixed;
+  top: 120px;
+  left: 200px; /* Alinhado com a sidebar */
+  width: 90px;
+  background: var(--white);
+  border-bottom-right-radius: 36px;
+  border-top-right-radius: 36px;
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  box-shadow: var(--card-shadow);
+  z-index: 90;
+  transition: width 0.3s ease, padding 0.3s ease, left 0.3s ease;
+}
+.menu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 100%;
+  padding: 10px 15px;
+  gap: 12px;
+}
+.menu-bar a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 10px 0;
+  width: 100%;
+  color: #333;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+.menu-bar a:hover {
+  background-color: #f0f0f0;
+}
+.menu-bar a img {
+  width: 28px;
+  height: 28px;
+}
+.menu-bar a p {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.1s;
+  white-space: nowrap;
+}
+#toggleMenu:checked ~ .menu-bar {
+  width: 280px;
+  align-items: flex-start;
+  padding: 16px;
+}
+#toggleMenu:checked ~ .menu-bar a,
+#toggleMenu:checked ~ .menu-bar .menu-toggle {
+  justify-content: flex-start;
+  padding: 10px 35px;
+}
+#toggleMenu:checked ~ .menu-bar a p {
+  display: block;
+  opacity: 1;
+}
+
+/* ================================================================== */
+/* ====== SEÇÃO CORRIGIDA PARA ÁREA DE CONTEÚDO E GRÁFICOS ====== */
+/* ================================================================== */
+
+.content-area {
+    margin-left: 290px; /* sidebar (200px) + menu (90px) */
+    padding: 80px 40px 200px 40px; 
+
+    min-height: 100vh;
+    box-sizing: border-box;
+    transition: margin-left 0.3s ease;
+}
+
+#toggleMenu:checked ~ .content-area {
+    margin-left: 496px; /* sidebar(200) + menu ABERTO(280) + espaço(16) */
+}
+
+.dashboard-content {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.content-title {
+    color: #333;
+    margin-bottom: 40px;
+    font-size: 2.2em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.charts-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    padding-bottom: 70px;
+}
+
+.chart-container {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    position: relative;
+    width: calc(50% - 20px);
+    max-width: 700px;
+    min-width: 350px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding-bottom: 70px;
+}
+
+.chart-container h2 {
+    color: #555;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.chart-container canvas {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* ===== RODAPÉ ===== */
+.footer {
+  position: fixed;
+  width: calc(100% - 200px); /* <<-- ALTERADO: Ocupa o resto da tela */
+  width: 100%;
+  right: 0;
+  bottom: 0;
+  background: #5d73da;
+  color: #fff;
+  text-align: center;
+  padding: 15px;
+  font-weight: 600;
+  z-index: 100;
+  transition: left 0.3s ease;
+}
+
+
+/* ================================================================== */
+/* ====== SEÇÃO RESPONSIVA UNIFICADA E CORRIGIDA ====== */
+/* ================================================================== */
+
+/* Telas de tablet e menores */
+@media (max-width: 1200px) {
+    .chart-container {
+        width: 100%; /* Um gráfico por linha */
+        max-width: 700px;
+    }
+}
+
+/* Telas de tablet em modo retrato */
+@media (max-width: 992px) {
+    .content-area {
+        margin-left: 290px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+/* Telas de celular */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 72px;
+        padding: 14px 6px;
+    }
+    .sidebar a {
+        margin-bottom: 10px;
+    }
+    header {
+        left: 72px;
+    }
+    .menu-bar {
+        left: 72px;
+        width: 70px;
+    }
+    .content-area {
+        margin-left: 142px; /* sidebar(72) + menu(70) */
+        padding: 80px 15px 80px 15px;
+    }
+    .footer {
+        left: 72px;
+    }
+    #toggleMenu:checked ~ .content-area {
+        margin-left: 292px; /* sidebar(72) + menu ABERTO(200) + espaço(20) */
+    }
+    #toggleMenu:checked ~ .menu-bar {
+        width: 200px;
+    }
+}

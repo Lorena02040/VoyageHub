@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/estilização/cadastro.css" />
+    <link rel="stylesheet" href="../assets/estilização/base página/base.css" />
+
+    <title>Controle de Carrinhos</title>
+    <link rel="icon" type="image/png" href="../assets/imgs/logo.png">
+    <style>
+        /* ... (CSS principal, .controls, .marker, .alert-banner-top) ... */
+        .fa, .fa-solid, .fas, .far, .fal, .fab { font-family: "Font Awesome 6 Free" !important; font-weight: 900 !important; }
+        .user-circle { width: 34px; height: 34px; border-radius: 50%; background: #fff; }
+        * { font-family: "Bai Jamjuree", sans-serif !important; }
+        .controls { margin-bottom: 30px; display: flex; gap: 10px; }
+        .controls button { padding: 10px 20px; font-size: 1em; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease, transform 0.2s ease; background-color: #007bff; color: white; }
+        .controls button:hover { background-color: #0056b3; transform: translateY(-2px); }
+        .controls button:active { transform: translateY(0); }
+        .controls button.clear { background-color: #dc3545; }
+        .controls button.clear:hover { background-color: #c82333; }
+        #mute-button { background-color: #6c757d; width: 50px; font-size: 1.2em; padding: 10px; }
+        #mute-button:hover { background-color: #5a6268; }
+        #map-container { position: relative; width: fit-content; border: 2px solid #ced4da; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); border-radius: 8px; overflow: hidden; }
+        #map-image { display: block; border-radius: 8px; }
+        .marker { width: 30px; height: 30px; background-color: rgba(220, 53, 69, 0.9); border: 3px solid #fff; border-radius: 50%; color: white; font-weight: bold; display: grid; place-items: center; font-size: 1em; position: absolute; transform: translate(-50%, -50%); display: none; animation: pulse 1.2s infinite ease-out; cursor: help; }
+        .marker.active { display: grid; }
+        @keyframes pulse { 0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); } 70% { transform: translate(-50%, -50%) scale(1.2); box-shadow: 0 0 0 15px rgba(220, 53, 69, 0); } 100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); } }
+        .alert-banner-top { position: fixed; top: -100px; left: 0; width: 100%; background-color: #d9534f; color: white; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; z-index: 2000; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); transition: top 0.5s ease-in-out; box-sizing: border-box; }
+        .alert-banner-top.active { top: 0; }
+        .alert-banner-top p { margin: 0; font-size: 1.2em; font-weight: bold; }
+        .alert-banner-top button { background-color: #fff; color: #d9534f; border: none; padding: 8px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 1em; }
+        
+        /* ... (CSS da Tabela) ... */
+        .table-container { width: 100%; margin-top: 30px; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); padding: 20px; }
+        table { width: 100%; border-collapse: collapse; font-size: 1em; }
+        table th, table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd; }
+        table th { background-color: #f4f6f8; color: #333; font-weight: bold; }
+        table tr:last-child td { border-bottom: none; }
+        table tr:hover { background-color: #f9f9f9; }
+        .status-alerta_enviado { background-color: #f2dede; color: #a94442; }
+        .status-retornou { background-color: #dff0d8; color: #3c763d; }
+        .status-saiu { background-color: #fcf8e3; color: #8a6d3b; }
+        .status-em_uso { background-color: #fcf8e3; color: #8a6d3b; }
+        .status-manutencao { background-color: #d9edf7; color: #31708f; }
+        .pagination-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+        .pagination-controls button { background-color: #6c757d; color: white; padding: 8px 16px; }
+        .pagination-controls button:hover { background-color: #5a6268; }
+        .pagination-controls button:disabled { background-color: #ccc; cursor: not-allowed; }
+        .pagination-controls span { font-size: 1em; color: #555; }
+        
+        /* O CSS de .edit-button, .save-button, etc. FOI REMOVIDO */
+    </style>
+</head>
+
+<body>
+    <div id="alert-banner" class="alert-banner-top">
+        <p id="banner-message">Mensagem de alerta...</p>
+        <button onclick="limparAlertas()">OK, CIENTE</button>
+    </div>
+
+    <aside class="sidebar">
+        <img src="../assets/imgs/logo.png" alt="Logotipo VoyageBus" width="120" class="logo">
+        <a href="../cadastro.html" class="active"><img src="../assets/imgs/Register_User.png">
+            <p>CADASTRAR</p>
+        </a>
+        <a href="../denuncia.html" class="button"><img src="../assets/imgs/Complaint.png">
+            <p>DENÚNCIAS</p>
+        </a>
+        <a href="../config.html" class="button"><img src="../assets/imgs/Settings.png">
+            <p>CONFIGURAÇÕES</p>
+        </a>
+    </aside>
+
+    <header>
+        <span id="nome-usuario-logado">Carregando...</span>
+        <div class="user-circle"><a href="#"><img src="../assets/imgs/user_header.png" alt="User"></a></div>
+    </header>
+
+    <main>
+        <h1 class="dashboard-title">Controle de Saídas de Carrinhos</h1>
+        <div class="dashboard">
+            <div id="map-container">
+                <img id="map-image" src="public/planta_rodoviaria.png" alt="Mapa da Rodoviária">
+                <div id="marker-A" class="marker" style="top: 220px; left: 187px;">A</div>
+                <div id="marker-B" class="marker" style="top: 200px; left: 287px;">B</div>
+                <div id="marker-C" class="marker" style="top: 40px; left: 350px;">C</div>
+                <div id="marker-D" class="marker" style="top: 340px; left: 422px;">D</div>
+                <div id="marker-E" class="marker" style="top: 440px; left: 702px;">E</div>
+                <br>
+                <div class="controls">
+                    <button id="mute-button" onclick="toggleMute()"><i class="fas fa-volume-up"></i></button>
+                </div>
+            </div>
+        </div> <br><br>
+
+        <div class="dashboard">
+            <div>
+                <h2 class="dashboard-title">Status dos Carrinhos</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID do Carrinho</th>
+                            <th>Status</th>
+                            <th>Contador</th>
+                            <th>Última Saída</th>
+                            </tr>
+                    </thead>
+                    <tbody id="carrinhos-table-body">
+                        </tbody>
+                </table>
+                <div class="pagination-controls" id="carrinhos-pagination">
+                    <button id="carrinhos-prev" onclick="prevPage('carrinhos')">Anterior</button>
+                    <span id="carrinhos-page-info">Página 1 de 1</span>
+                    <button id="carrinhos-next" onclick="nextPage('carrinhos')">Próxima</button>
+                </div>
+            </div><br><br>
+
+            <div>
+                <h2 class="dashboard-title">Histórico de Alertas</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID do Carrinho</th>
+                            <th>Mensagem</th>
+                            <th>Saída</th>
+                            <th>Data e Hora</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alertas-table-body">
+                        </tbody>
+                </table>
+                <div class="pagination-controls" id="alertas-pagination">
+                    <button id="alertas-prev" onclick="prevPage('alertas')">Anterior</button>
+                    <span id="alertas-page-info">Página 1 de 1</span>
+                    <button id="alertas-next" onclick="nextPage('alertas')">Próxima</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <audio id="alert-sound" src="public/aviso.mp3" preload="auto"></audio>
+    <footer class="footer">©2025 Todos os direitos reservados para Tech Seul</footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script>
+        // --- 0. INICIALIZAÇÃO DO FIREBASE ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyBLHKrtSiLBCoXKZr7O6sQYSfG1_0GhC3M",
+            authDomain: "piteste-188ec.firebaseapp.com",
+            databaseURL: "https://piteste-188ec-default-rtdb.firebaseio.com",
+            projectId: "piteste-188ec",
+            storageBucket: "piteste-188ec.firebasestorage.app",
+            messagingSenderId: "619288038856",
+            appId: "1:619288038856:web:0c21cac9811028defac4fd",
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        // --- FIM DA INICIALIZAÇÃO ---
+
+        // --- Variáveis Globais ---
+        let isMuted = false;
+        let femaleVoice = null;
+        const API_URL = 'http://localhost:3000';
+        let allAlertasData = [];
+        let allCarrinhosData = [];
+        let currentPage = {
+            alertas: 1,
+            carrinhos: 1
+        };
+        const ITEMS_PER_PAGE = 10;
+        // let linhaEmEdicao = null; // REMOVIDO
+
+        // --- 1. LÓGICA DE VOZ, SOM E ALERTA (Funções Globais) ---
+        function loadVoices() {
+            let voices = window.speechSynthesis.getVoices();
+            femaleVoice = voices.find(voice =>
+                voice.lang === 'pt-BR' &&
+                (voice.name.includes('Feminino') || voice.name.includes('Female') || voice.name.includes('Maria') || voice.name.includes('Google português do Brasil'))
+            );
+            if (!femaleVoice) {
+                femaleVoice = voices.find(voice => voice.lang === 'pt-BR');
+            }
+        }
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function showAlert(exitId, cartId) {
+            limparAlertas();
+            let markerId = `marker-${exitId}`;
+            if (!document.getElementById(markerId)) {
+                console.warn(`Marcador para saída ${exitId} não encontrado. Usando 'A' como padrão.`);
+                markerId = 'marker-A';
+            }
+            const markerElement = document.getElementById(markerId);
+
+            if (markerElement) {
+                markerElement.classList.add('active');
+                const banner = document.getElementById('alert-banner');
+                const bannerMessage = document.getElementById('banner-message');
+                const cartIdFalado = cartId.replace("ID", "ID ");
+                bannerMessage.textContent = `ALERTA: Carrinho ${cartIdFalado} saiu pela Saída ${exitId} e não retornou!`;
+                banner.classList.add('active');
+                if (!isMuted) {
+                    const alertSound = document.getElementById('alert-sound');
+                    const textoParaFalar = `Alerta! Carrinho ${cartIdFalado} saiu pela saída ${exitId} e não retornou à unidade. Encaminhe o responsável para verificar.`;
+                    const utterance = new SpeechSynthesisUtterance(textoParaFalar);
+                    utterance.lang = 'pt-BR';
+                    utterance.rate = 1.0;
+                    if (femaleVoice) { utterance.voice = femaleVoice; }
+                    const speakNow = () => { window.speechSynthesis.speak(utterance); };
+                    window.speechSynthesis.cancel();
+                    if (alertSound) { alertSound.pause(); alertSound.currentTime = 0; }
+                    if (alertSound) {
+                        let playPromise = alertSound.play();
+                        if (playPromise !== undefined) {
+                            playPromise.then(_ => { alertSound.onended = speakNow; })
+                                .catch(error => { console.warn("Autoplay do som bloqueado.", error); speakNow(); });
+                        } else { speakNow(); }
+                    } else { console.warn("Elemento <audio id='alert-sound'> não encontrado."); speakNow(); }
+                }
+            } else { console.warn(`Marcador de fallback 'marker-A' também não foi encontrado.`); }
+        }
+
+        function limparAlertas() {
+            const allMarkers = document.querySelectorAll('.marker');
+            allMarkers.forEach(marker => { marker.classList.remove('active'); });
+            window.speechSynthesis.cancel();
+            const alertSound = document.getElementById('alert-sound');
+            if (alertSound) { alertSound.pause(); alertSound.currentTime = 0; }
+            const banner = document.getElementById('alert-banner');
+            if (banner) { banner.classList.remove('active'); }
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            const muteButton = document.getElementById('mute-button');
+            const icon = muteButton.querySelector('i');
+            if (isMuted) {
+                icon.classList.remove('fa-volume-up');
+                icon.classList.add('fa-volume-mute');
+                limparAlertas();
+            } else {
+                icon.classList.remove('fa-volume-mute');
+                icon.classList.add('fa-volume-up');
+            }
+        }
+
+        // --- 2. LÓGICA DAS TABELAS E PAGINAÇÃO (Funções Globais) ---
+
+        function formatarData(isoString) {
+            if (!isoString) return 'N/A';
+            try {
+                const data = new Date(isoString);
+                return data.toLocaleString('pt-BR');
+            } catch (e) {
+                return isoString;
+            }
+        }
+
+        function renderAlertasTable() {
+            const tableBody = document.getElementById('alertas-table-body');
+            if (!tableBody) return;
+            tableBody.innerHTML = '';
+            const page = currentPage.alertas;
+            const start = (page - 1) * ITEMS_PER_PAGE;
+            const end = start + ITEMS_PER_PAGE;
+            const paginatedItems = allAlertasData.slice(start, end);
+            if (paginatedItems.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="4">Nenhum alerta encontrado.</td></tr>';
+            } else {
+                paginatedItems.forEach(alerta => {
+                    const row = `
+                <tr class="status-alerta_enviado">
+                    <td>${alerta.carrinhoId || 'N/A'}</td>
+                    <td>${alerta.mensagem || 'N/A'}</td>
+                    <td>${alerta.saida || 'N/A'}</td>
+                    <td>${formatarData(alerta.hora)}</td>
+                </tr>
+            `;
+                    tableBody.innerHTML += row;
+                });
+            }
+            updatePaginationControls('alertas', allAlertasData.length);
+        }
+
+        // ### LÓGICA DE RENDERIZAÇÃO DOS CARRINHOS (SIMPLIFICADA) ###
+        function renderCarrinhosTable() {
+            const tableBody = document.getElementById('carrinhos-table-body');
+            if (!tableBody) return;
+            tableBody.innerHTML = '';
+            const page = currentPage.carrinhos;
+            const start = (page - 1) * ITEMS_PER_PAGE;
+            const end = start + ITEMS_PER_PAGE;
+            const paginatedItems = allCarrinhosData.slice(start, end);
+
+            if (paginatedItems.length === 0) {
+                // Colspan mudou de 5 para 4
+                tableBody.innerHTML = '<tr><td colspan="4">Nenhum carrinho encontrado.</td></tr>';
+            } else {
+                paginatedItems.forEach(carrinho => {
+                    const statusClass = `status-${carrinho.status || 'desconhecido'}`;
+                    // A célula <td> de Ação foi REMOVIDA
+                    const row = `
+                <tr class="${statusClass}" data-cart-id="${carrinho.id}">
+                    <td>${carrinho.id}</td>
+                    <td class="cell-status">${carrinho.status || 'N/A'}</td>
+                    <td>${carrinho.contador || '0'}</td>
+                    <td>${carrinho.ultima_saida || 'N/A'}</td>
+                </tr>
+            `;
+                    tableBody.innerHTML += row;
+                });
+            }
+            updatePaginationControls('carrinhos', allCarrinhosData.length);
+        }
+
+        async function fetchAlertas() {
+            try {
+                const response = await fetch(`${API_URL}/alertas`);
+                if (!response.ok) throw new Error('Erro ao buscar alertas');
+                allAlertasData = await response.json();
+                currentPage.alertas = 1;
+                renderAlertasTable();
+            } catch (error) {
+                console.error(error);
+                document.getElementById('alertas-table-body').innerHTML = '<tr><td colspan="4">Erro ao carregar dados.</td></tr>';
+            }
+        }
+
+        async function fetchCarrinhos() {
+            try {
+                const response = await fetch(`${API_URL}/carrinhos`);
+                if (!response.ok) throw new Error('Erro ao buscar carrinhos');
+                allCarrinhosData = await response.json();
+                currentPage.carrinhos = 1;
+                renderCarrinhosTable();
+            } catch (error) {
+                console.error(error);
+                document.getElementById('carrinhos-table-body').innerHTML = '<tr><td colspan="4">Erro ao carregar dados.</td></tr>';
+            }
+        }
+        
+        // --- FUNÇÕES DE EDIÇÃO (handleEditStatus, etc.) FORAM REMOVIDAS ---
+
+        // Funções de controle da Paginação
+        function updatePaginationControls(type, totalItems) {
+            const page = currentPage[type];
+            const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+            const pageInfo = document.getElementById(`${type}-page-info`);
+            const prevButton = document.getElementById(`${type}-prev`);
+            const nextButton = document.getElementById(`${type}-next`);
+            if (pageInfo) pageInfo.textContent = `Página ${page} de ${totalPages || 1}`;
+            if (prevButton) prevButton.disabled = (page === 1);
+            if (nextButton) nextButton.disabled = (page === totalPages || totalPages === 0);
+        }
+
+        function nextPage(type) {
+            const totalPages = Math.ceil((type === 'alertas' ? allAlertasData.length : allCarrinhosData.length) / ITEMS_PER_PAGE);
+            if (currentPage[type] < totalPages) {
+                currentPage[type]++;
+                if (type === 'alertas') renderAlertasTable();
+                else renderCarrinhosTable();
+            }
+        }
+
+        function prevPage(type) {
+            if (currentPage[type] > 1) {
+                currentPage[type]--;
+                if (type === 'alertas') renderAlertasTable();
+                else renderCarrinhosTable();
+            }
+        }
+
+
+        // --- 3. CÓDIGO DO WEBSOCKET E INICIALIZAÇÃO ---
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // 1. Inicia a checagem de login (que vai chamar o fetch de dados)
+            buscarNomeDoUsuario();
+            
+            // 2. Inicia o WebSocket
+            connectWebSocket();
+
+            // 3. O 'Event Listener' para edição FOI REMOVIDO
+            
+            // 4. Definição do WebSocket
+            function connectWebSocket() {
+                const ws = new WebSocket('ws://localhost:3000');
+                ws.onopen = () => { console.log('Conectado ao servidor de alertas!'); };
+                ws.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+                    console.log("Recebeu do WebSocket:", data);
+                    if (data.tipo === 'ALERTA_CARRINHO') {
+                        const carrinhoId = data.carrinhoId;
+                        const saida = data.saida;
+                        showAlert(saida, carrinhoId);
+                        fetchAlertas();
+                        fetchCarrinhos();
+                    }
+                };
+                ws.onclose = () => {
+                    console.log('Desconectado. Tentando reconectar em 3s...');
+                    setTimeout(connectWebSocket, 3000);
+                };
+                ws.onerror = (error) => {
+                    console.error('Erro no WebSocket:', error);
+                    ws.close();
+                };
+            }
+        });
+
+        // --- 4. FUNÇÃO DE AUTENTICAÇÃO ---
+        function buscarNomeDoUsuario() {
+            console.log("Iniciando buscarNomeDoUsuario...");
+            const spanNomeUsuario = document.getElementById('nome-usuario-logado');
+            if (!spanNomeUsuario) {
+                console.error("ERRO: O span 'nome-usuario-logado' não foi encontrado!");
+                return;
+            }
+            auth.onAuthStateChanged((user) => {
+                console.log("Auth state mudou.");
+                if (user) {
+                    console.log("Usuário detectado:", user.uid);
+                    const nome = user.displayName || user.email;
+                    if (nome) {
+                        spanNomeUsuario.innerText = `${nome.toUpperCase()} - ADM`;
+                    } else {
+                        spanNomeUsuario.innerText = "ADMINISTRADOR";
+                    }
+                    console.log(`Nome do usuário atualizado para: ${spanNomeUsuario.innerText}`);
+                } else {
+                    console.log("Nenhum usuário está logado.");
+                    spanNomeUsuario.innerText = "NÃO LOGADO";
+                }
+                
+                // Carrega os dados DEPOIS de saber o status do login
+                fetchAlertas();
+                fetchCarrinhos();
+            });
+        }
+    </script>
+</body>
+
+</html>

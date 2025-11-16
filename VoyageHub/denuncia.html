@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/estilização/base página/base.css" />
+  <link rel="stylesheet" href="assets/estilização/denuncia.css" />
+
+  <title>Dashboard de Gerenciamento</title>
+  <link rel="icon" type="image/png" href="assets/imgs/logo.png">
+  <style>
+.fa, .fa-solid, .fas, .far, .fal, .fab {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+}
+    * {
+      font-family: "Bai Jamjuree", sans-serif !important;
+    }
+
+    /* Estilos Gerais */
+    body {
+      background-color: #E1E6FF;
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    /* Estilo base para todos os cards */
+    .denuncia {
+      background-color: #ffffff;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      line-height: 1;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .denuncia .topo {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+      gap: 8px;
+      width: 100%;
+      color: inherit;
+    }
+
+    /* Estilo do nome do usuário */
+    .denuncia .usuario-info {
+      font-weight: 600;
+      color: #000;
+      font-size: 0.95rem;
+      flex: 1;
+    }
+
+    /* Estilo da data */
+    .denuncia .meta {
+      font-size: 0.9rem;
+      color: #444;
+      text-align: right;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .denuncia:hover {
+      transform: translateY(-5px);
+    }
+
+    .denuncia p {
+      font-size: 14px;
+      margin: 0;
+    }
+
+    /* --- CORES BASEADAS NO STATUS --- */
+    .red {
+      background: #fde8e8;
+      border-top: 4px solid #e57373;
+    }
+
+    .yellow {
+      background: #fff8e1;
+      border-top: 4px solid #ffd54f;
+    }
+
+    .green {
+      background: #e8f5e9;
+      border-top: 4px solid #81c784;
+    }
+
+    /* --- ESTILOS DO MODAL --- */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-conteudo {
+      background-color: #fefefe;
+      margin: 10% auto;
+      padding: 20px 30px;
+      border-radius: 8px;
+      width: 80%;
+      max-width: 600px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+
+    .fechar {
+      color: #aaa;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .modal-acoes {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+      display: flex;
+      gap: 10px;
+    }
+
+    .modal-acoes button,
+    .salvar-finalizacao {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .iniciar {
+      background-color: #f39c12;
+    }
+
+    .contato {
+      background-color: #3498db;
+    }
+
+    .finalizar {
+      background-color: #e74c3c;
+    }
+
+    .salvar-finalizacao {
+      background-color: #27ae60;
+      margin-top: 10px;
+    }
+
+    /*
+    ==================================================================
+    NOVOS ESTILOS PARA A ÁREA DE BUSCA E FILTRO (BASEADO NA IMAGEM)
+    ==================================================================
+    */
+
+    /* --- Filtro Dropdown Estilizado --- */
+    .filter-btn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background-color: #fff;
+      border: 1px solid #dfe1e5;
+      border-radius: 24px;
+      height: 40px;
+      padding-left: 16px;
+      min-width: 220px;
+    }
+
+    .filter-btn label {
+      font-size: 14px;
+      color: #555;
+      white-space: nowrap;
+    }
+
+    #filtroStatus {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background: transparent;
+      border: none;
+      outline: none;
+      width: 100%;
+      height: 100%;
+      padding-right: 35px;
+      font-size: 14px;
+      color: #333;
+      cursor: pointer;
+    }
+
+    .filter-btn::after {
+      content: ' ';
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      margin-top: -3px;
+      pointer-events: none;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid #888;
+    }
+
+    .content-area {
+      background-color: #E1E6FF;
+      padding-left: 310px;
+      padding-top: 60px;
+      padding-right: 30px;
+      padding-bottom: 60px
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+
+      background-color: #fff;
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <img src="assets/imgs/logo.png" alt="Logotipo VoyageBus" width="120" class="logo">
+
+    <a href="cadastro.html" class="button">
+      <img src="assets/imgs/Register_User.png" alt="Cadastrar">
+      <p>CADASTRAR</p>
+    </a>
+
+    <a href="#" class="active">
+      <img src="assets/imgs/Complaint.png" alt="Denúncias">
+      <p>DENÚNCIAS</p>
+    </a>
+
+    <a href="config.html" class="button">
+      <img src="assets/imgs/Settings.png" alt="Configurações">
+      <p>CONFIGURAÇÕES</p>
+    </a>
+  </aside>
+
+  <input type="checkbox" id="toggleMenu" hidden>
+
+  <nav class="menu-bar">
+
+    <label for="toggleMenu" class="menu-toggle">
+      <i class="fa-solid fa-bars"></i>
+    </label>
+
+    <a href="#">
+      <img src="assets/imgs/gerenciar.png" alt="Gerenciar Denúncias">
+      <p>Gerenciar Denúncias</p>
+    </a>
+
+    <a href="relatorio.html" class="button">
+      <img src="assets/imgs/relatorio.png" alt="Relatórios e estatísticas">
+      <p>Relatórios e estatísticas</p>
+    </a>
+
+    <a href="registro.html" class="button">
+      <img src="assets/imgs/registro.png" alt="Registro de perdas">
+      <p>Registro de perdas</p>
+    </a>
+
+    <a href="historico.html" class="button">
+      <img src="assets/imgs/historico.png" alt="Histórico de ocorrências">
+      <p>Histórico de ocorrências</p>
+    </a>
+  </nav>
+<header>
+<span id="nome-usuario-logado">Carregando...</span>
+<div class="user-circle"><a href="#"><img src="assets/imgs/user_header.png" alt="User"></a></div>
+</header>
+
+  <main class="content-area">
+    <div class="dashboard-header">
+      <h1 class="content-title">Gerenciar Denúncias</h1>
+      <div class="search-filter-container">
+        <div class="search-box">
+          <input type="text" id="campoPesquisa" placeholder="Pesquisar por nome, tipo ou local...">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        </div>
+        <div class="filter-wrapper">
+          <select id="filtroStatus">
+            <option value="todos">Todos os Status</option>
+            <option value="nao_iniciado">Não Iniciado</option>
+            <option value="em_analise">Em Análise</option>
+            <option value="finalizado">Finalizado</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+    </div>
+  </main>
+
+  <footer class="footer">©2025 Todos os direitos reservados para Tech Seul</footer>
+
+  <div id="modalDetalhes" class="modal">
+    <div class="modal-conteudo">
+      <span class="fechar">&times;</span>
+      <h2>Detalhes da Denúncia</h2>
+      <p><strong>Nome:</strong> <span id="det-nome"></span></p>
+      <p><strong>Telefone:</strong> <span id="det-telefone"></span></p>
+      <p><strong>Data e Hora:</strong> <span id="det-data"></span></p>
+      <p><strong>Local:</strong> <span id="det-local"></span></p>
+      <p><strong>Descrição:</strong></p>
+      <div class="descricao-box">
+        <span id="det-descricao"></span>
+      </div>
+
+      <div class="modal-acoes">
+        <button class="iniciar">Iniciar Análise</button>
+        <button class="contato">Entrar em Contato</button>
+        <button class="finalizar">Finalizar Caso</button>
+      </div>
+
+      <div id="finalidade-container" style="display:none;">
+        <label for="finalidade-texto">Descreva a resolução do caso:</label>
+        <textarea id="finalidade-texto" rows="3"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+  <script src="functions/dashboardDenuncias.js"></script>
+</body>
+
+</html>

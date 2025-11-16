@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="assets/estilização/config.css" />
+  <link rel="stylesheet" href="assets/estilização/base página/base.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+  <title>Configurações - VoyageBus</title>
+  <link rel="icon" type="image/png" href="assets/imgs/logo.png">
+  <style>
+    * {
+      font-family: "Bai Jamjuree", sans-serif !important;
+    }
+
+    .config-wrapper {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .main-title {
+      text-align: left;
+      margin-bottom: 20px;
+      font-size: 2em;
+      color: #333;
+    }
+
+    .config-container {
+      background-color: #ffffff;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .config-container p {
+      margin: 0;
+      font-size: 1.1em;
+      color: #555;
+    }
+
+    /* Estilo base para botões */
+    .config-container .button {
+      color: white;
+      text-align: center;
+      padding: 12px 25px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-block;
+      transition: background-color 0.3s ease;
+      width: auto;
+      min-width: 200px;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Botão Sair */
+    .config-container .button#logout-btn {
+      background-color: #dc3545;
+    }
+
+    .config-container .button#logout-btn:hover {
+      background-color: #c82333;
+    }
+
+    /* NOVO BOTÃO: Gerenciar Usuários */
+    .config-container .button#manage-users-btn {
+      background-color: #007bff;
+    }
+
+    .config-container .button#manage-users-btn:hover {
+      background-color: #0056b3;
+    }
+
+
+    .config-container .dashboard#default-dashboard {
+      display: contents;
+    }
+
+    /* --- NOVOS ESTILOS PARA O MODAL (POPUP) --- */
+    .modal {
+      display: none;
+      /* Escondido por padrão */
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.6);
+      /* Fundo escurecido */
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 8% auto;
+      padding: 25px;
+      border: 1px solid #888;
+      width: 85%;
+      max-width: 900px;
+      border-radius: 10px;
+      position: relative;
+    }
+
+    .close-btn {
+      color: #aaa;
+      position: absolute;
+      top: 10px;
+      right: 25px;
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    .close-btn:hover,
+    .close-btn:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* Estilos da Tabela */
+    .modal-content h3 {
+      margin-top: 20px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      background-color: #f4f4f4;
+    }
+
+    /* Botão Excluir na tabela */
+    .delete-btn {
+      background-color: #dc3545;
+      color: white;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9em;
+      font-weight: 500;
+    }
+
+    .delete-btn:hover {
+      background-color: #c82333;
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <img src="assets/imgs/logo.png" alt="Logotipo VoyageBus" width="120" class="logo">
+
+    <a href="cadastro.html" class="button">
+      <img src="assets/imgs/Register_User.png" alt="Cadastrar">
+      <p>CADASTRAR</p>
+    </a>
+
+    <a href="denuncia.html" class="button">
+      <img src="assets/imgs/Complaint.png" alt="Denúncias">
+      <p>DENÚNCIAS</p>
+    </a>
+
+    <a href="#" class="active">
+      <img src="assets/imgs/Settings.png" alt="Configurações">
+      <p>CONFIGURAÇÕES</p>
+    </a>
+  </aside>
+
+  <header>
+  </header>
+
+  <main>
+    <div class="config-wrapper">
+      <h2 class="main-title">Configurações</h2><br><br>
+      <div class="config-container">
+
+        <p>Gerencie os usuários cadastrados no sistema.</p>
+        <button id="manage-users-btn" class="button">
+          <p>GERENCIAR USUÁRIOS</p>
+        </button>
+
+        <hr style="width:100%; border: 1px solid #eee; margin: 10px 0;">
+
+        <p>Clique no botão abaixo para encerrar sua sessão.</p>
+        <a href="#" id="logout-btn" class="button">
+          <p>SAIR DA CONTA</p>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <div id="user-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h2>Gerenciamento de Usuários</h2>
+
+      <h3>Administradores</h3>
+      <div style="overflow-x:auto;">
+        <table id="admin-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody id="admin-table-body">
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Motoristas</h3>
+      <div style="overflow-x:auto;">
+        <table id="driver-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody id="driver-table-body">
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+  <footer class="footer">©2025 Todos os direitos reservados para Tech Seul</footer>
+
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBLHKrtSiLBCoXKZr7O6sQYSfG1_0GhC3M",
+      authDomain: "piteste-188ec.firebaseapp.com",
+      databaseURL: "https://piteste-188ec-default-rtdb.firebaseio.com",
+      projectId: "piteste-188ec",
+      storageBucket: "piteste-188ec.appspot.com",
+      messagingSenderId: "619288038856",
+      appId: "1:619288038856:web:0c21cac9811028defac4fd",
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const auth = firebase.auth();
+    // INICIALIZA O FIRESTORE
+    const db = firebase.firestore();
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const logoutButton = document.getElementById('logout-btn');
+
+      if (logoutButton) {
+        logoutButton.addEventListener('click', (event) => {
+          event.preventDefault();
+
+          if (confirm("Você tem certeza que deseja sair?")) {
+            auth.signOut().then(() => {
+              console.log('Usuário deslogado com sucesso.');
+              window.location.href = 'login.html';
+            }).catch((error) => {
+              console.error('Erro ao fazer logout:', error);
+              alert('Não foi possível sair. Por favor, tente novamente.');
+            });
+          }
+        });
+      }
+
+      // --- NOVO SCRIPT PARA O MODAL ---
+
+      // 1. Pegar os elementos do DOM
+      const modal = document.getElementById('user-modal');
+      const openModalBtn = document.getElementById('manage-users-btn');
+      const closeModalBtn = document.querySelector('.close-btn');
+
+      // 2. Abrir o modal e carregar os dados
+      openModalBtn.addEventListener('click', () => {
+        modal.style.display = 'block';
+        loadUsersData(); // Chama a função para buscar dados do Firestore
+      });
+
+      // 3. Fechar o modal (pelo 'x')
+      closeModalBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+      });
+
+      // 4. Fechar o modal (clicando fora)
+      window.addEventListener('click', (event) => {
+        if (event.target == modal) {
+          modal.style.display = 'none';
+        }
+      });
+
+      // 5. Função para carregar os dados das coleções
+      async function loadUsersData() {
+        // Limpa as tabelas antes de carregar
+        document.getElementById('admin-table-body').innerHTML = '<tr><td colspan="3">Carregando...</td></tr>';
+        document.getElementById('driver-table-body').innerHTML = '<tr><td colspan="3">Carregando...</td></tr>';
+
+        // Buscar e renderizar Admins
+        await renderTable('usuarios_adm', document.getElementById('admin-table-body'));
+        // Buscar e renderizar Motoristas
+        await renderTable('usuario_motoristas', document.getElementById('driver-table-body'));
+      }
+
+      // 6. Função reutilizável para buscar dados e popular a tabela
+      async function renderTable(collectionName, tableBody) {
+        try {
+          const snapshot = await db.collection(collectionName).get();
+
+          // Limpa o "Carregando..."
+          tableBody.innerHTML = '';
+
+          if (snapshot.empty) {
+            tableBody.innerHTML = '<tr><td colspan="3">Nenhum usuário encontrado.</td></tr>';
+            return;
+          }
+
+          snapshot.forEach(doc => {
+            const user = doc.data();
+            const userId = doc.id;
+
+            // !! IMPORTANTE !!: Ajuste 'user.nome' e 'user.email'
+            // para os nomes exatos dos campos no seu Firestore.
+            const userName = user.nome || 'Nome não informado';
+            const userEmail = user.email || 'Email não informado';
+
+            const row = `
+              <tr data-id="${userId}">
+                <td>${userName}</td>
+                <td>${userEmail}</td>
+                <td>
+                  <button class="delete-btn" data-id="${userId}" data-collection="${collectionName}">
+                    Excluir
+                  </button>
+                </td>
+              </tr>
+            `;
+            tableBody.innerHTML += row;
+          });
+
+        } catch (error) {
+          console.error("Erro ao buscar dados da coleção:", collectionName, error);
+          tableBody.innerHTML = `<tr><td colspan="3">Erro ao carregar dados.</td></tr>`;
+        }
+      }
+
+      // 7. Lógica de Exclusão (usando delegação de evento)
+      // Escuta cliques dentro do modal
+      modal.addEventListener('click', async (event) => {
+        // Verifica se o clique foi em um botão com a classe 'delete-btn'
+        if (event.target.classList.contains('delete-btn')) {
+
+          const id = event.target.dataset.id;
+          const collection = event.target.dataset.collection;
+
+          if (confirm(`Tem certeza que deseja excluir este usuário da coleção "${collection}"? Esta ação é irreversível.`)) {
+            try {
+              // Exclui do Firestore
+              await db.collection(collection).doc(id).delete();
+
+              // Remove a linha da tabela (o <tr> pai do botão)
+              event.target.closest('tr').remove();
+
+              alert('Usuário excluído com sucesso!');
+
+            } catch (error) {
+              console.error("Erro ao excluir usuário:", error);
+              alert('Falha ao excluir usuário. Tente novamente.');
+            }
+          }
+        }
+      });
+
+    }); // Fim do DOMContentLoaded
+  </script>
+</body>
+
+</html>

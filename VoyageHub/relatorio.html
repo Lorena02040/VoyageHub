@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="assets/estilização/base página/base.css"/>
+  <link rel="stylesheet" href="assets/estilização/relatorio.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="icon" type="image/png" href="assets/imgs/logo.png">
+  <style>
+    .fa, .fa-solid, .fas, .far, .fal, .fab {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+}
+    * {
+      font-family: "Bai Jamjuree", sans-serif !important;
+    }
+    .menu-bar {
+       border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+
+    }
+  .chart-container {
+  position: relative; /* Essencial para o Chart.js gerenciar o tamanho corretamente */
+  height: 400px;      /* Defina uma altura fixa para o contêiner do gráfico */
+  width: 90%;         /* Use uma largura responsiva */
+  margin: 40px auto;  /* Centraliza o contêiner e adiciona espaço vertical */
+}
+
+/* Garante que o canvas não cause problemas de layout */
+canvas {
+  max-width: 100%;
+}
+
+  </style>
+  <title>Dashboard de Gerenciamento</title>
+</head>
+<body>
+  <aside class="sidebar">
+    <img src="assets/imgs/logo.png" alt="Logotipo VoyageBus" width="120" class="logo">
+    
+    <a href="cadastro.html" class="button">
+      <img src="assets/imgs/Register_User.png" alt="Cadastrar">
+      <p>CADASTRAR</p>
+    </a>
+
+    <a href="#" class="active">
+      <img src="assets/imgs/Complaint.png" alt="Denúncias">
+      <p>DENÚNCIAS</p>
+    </a>
+
+    <a href="config.html" class="button">
+      <img src="assets/imgs/Settings.png" alt="Configurações">
+      <p>CONFIGURAÇÕES</p>
+    </a>
+  </aside>
+
+  <input type="checkbox" id="toggleMenu" hidden>
+  
+  <nav class="menu-bar">
+    
+    <label for="toggleMenu" class="menu-toggle">
+<i class="fa-solid fa-bars"></i>
+    </label>
+    
+    <a href="denuncia.html" class="button">
+      <img src="assets/imgs/gerenciar.png" alt="Gerenciar Denúncias">
+      <p>Gerenciar Denúncias</p>
+    </a>
+    
+    <a href="relatorio.html" class="button">
+      <img src="assets/imgs/relatorio.png" alt="Relatórios e estatísticas">
+      <p>Relatórios e estatísticas</p>
+    </a>
+
+    <a href="registro.html" class="button">
+      <img src="assets/imgs/registro.png" alt="Registro de perdas">
+      <p>Registro de perdas</p>
+    </a>
+
+    <a href="historico.html" class="button">
+      <img src="assets/imgs/historico.png" alt="Histórico de ocorrências">
+      <p>Histórico de ocorrências</p>
+    </a>
+  </nav>
+
+<header>
+<span id="nome-usuario-logado">Carregando...</span>
+<div class="user-circle"><a href="#"><img src="assets/imgs/user_header.png" alt="User"></a></div>
+</header>
+
+<main class="content-area">
+    <div class="dashboard-content">
+        <h1 class="content-title">Relatórios e Estatísticas</h1>
+        
+        <div class="charts-grid">
+
+            <div class="chart-container">
+                <h2 style="text-align: center; margin-bottom: 15px;">Tipos de Denúncia</h2>
+                <canvas id="graficoDenuncias"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2 style="text-align: center; margin-bottom: 15px;">Status das Denúncias</h2>
+                <canvas id="graficoStatus"></canvas>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+  <footer class="footer">©2025 Todos os direitos reservados para Tech Seul</footer>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <script src="functions/relatorioeEstatisticas.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoyageBus - Login</title>
+    <link rel="icon" type="image/png" href="assets/imgs/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/estilização/login.css">
+    <style>
+        .fa,
+        .fa-solid,
+        .fas,
+        .far,
+        .fal,
+        .fab {
+            font-family: "Font Awesome 6 Free" !important;
+            font-weight: 900 !important;
+        }
+
+        * {
+            font-family: "Bai Jamjuree", sans-serif !important;
+        }
+
+        .mensagem {
+            color: #D8000C;
+            background-color: #FFD2D2;
+            border: 1px solid #D8000C;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 0.9em;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-left">
+            <img src="assets/imgs/logo.png" alt="VoyageBus" class="logo">
+            <p>
+                Seja bem-vindo ao VoyageHub, o sistema dedicado ao gerenciamento administrativo de sua empresa.
+                Faça o login com seu email e senha cadastrados.
+            </p>
+        </div>
+
+        <div class="login-right">
+            <form class="login-box" id="loginForm">
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Digite seu email" required>
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
+
+                <p id="mensagem" class="mensagem"></p>
+
+                <button type="submit" id="btnLogin" class="btn-login">ENTRAR</button>
+            </form>
+
+            <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+            <script>
+                // =================================================================
+                // 2. CONFIGURAÇÃO DO FIREBASE
+                // =================================================================
+                const firebaseConfig = {
+                    apiKey: "AIzaSyBLHKrtSiLBCoXKZr7O6sQYSfG1_0GhC3M",
+                    authDomain: "piteste-188ec.firebaseapp.com",
+                    databaseURL: "https://piteste-188ec-default-rtdb.firebaseio.com",
+                    projectId: "piteste-188ec",
+                    storageBucket: "piteste-188ec.appspot.com",
+                    messagingSenderId: "619288038856",
+                    appId: "1:619288038856:web:0c21cac9811028defac4fd",
+                };
+
+                // Inicializa o Firebase
+                firebase.initializeApp(firebaseConfig);
+                const auth = firebase.auth();
+
+                // =================================================================
+                // 3. SCRIPT DE LOGIN (MODIFICADO PARA USAR FIREBASE AUTH)
+                // =================================================================
+
+                const loginForm = document.getElementById('loginForm');
+                const btnLogin = document.getElementById('btnLogin');
+                const mensagemElement = document.getElementById('mensagem');
+                const emailInput = document.getElementById('email');
+                const senhaInput = document.getElementById('senha');
+
+                loginForm.addEventListener('submit', function (event) {
+                    event.preventDefault();
+
+                    btnLogin.disabled = true;
+                    btnLogin.textContent = 'ENTRANDO...';
+                    mensagemElement.style.display = 'none';
+
+                    const email = emailInput.value;
+                    const senha = senhaInput.value;
+
+                    auth.signInWithEmailAndPassword(email, senha)
+                        .then(userCredential => {
+                            window.location.href = 'cadastro.html';
+                        })
+                        .catch(error => {
+                            console.error('Erro de autenticação:', error.code, error.message);
+
+                            let mensagemErro = 'Ocorreu um erro. Tente novamente.';
+                            switch (error.code) {
+                                case 'auth/user-not-found':
+                                case 'auth/invalid-email':
+                                    mensagemErro = 'Email não encontrado ou inválido.';
+                                    break;
+                                case 'auth/wrong-password':
+                                    mensagemErro = 'Senha incorreta.';
+                                    break;
+                                case 'auth/too-many-requests':
+                                    mensagemErro = 'Muitas tentativas falharam. Tente novamente mais tarde.';
+                                    break;
+                            }
+
+                            mensagemElement.textContent = mensagemErro;
+                            mensagemElement.style.display = 'block';
+                        })
+                        .finally(() => {
+                            btnLogin.disabled = false;
+                            btnLogin.textContent = 'ENTRAR';
+                        });
+                });
+            </script>
+</body>
+
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="assets/estilização/base página/base.css" />
+  <link rel="stylesheet" href="assets/estilização/registro.css" />
+  <title>Dashboard de Gerenciamento</title>
+  <link rel="icon" type="image/png" href="assets/imgs/logo.png">
+  <style>
+    .fa,
+    .fa-solid,
+    .fas,
+    .far,
+    .fal,
+    .fab {
+      font-family: "Font Awesome 6 Free" !important;
+      font-weight: 900 !important;
+    }
+
+    * {
+      font-family: "Bai Jamjuree", sans-serif !important;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    .modal-conteudo {
+      background-color: #fefefe;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 8px;
+      position: relative;
+    }
+
+    .fechar {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+    }
+
+    .fechar:hover,
+    .fechar:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .modal-conteudo h2 {
+      margin-top: 0;
+    }
+
+    .modal-conteudo p {
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+
+    #det-imagem-anexo {
+      max-width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
+
+    .contato {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .contato:hover {
+      background-color: #45a049;
+    }
+
+    .denuncia .topo {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+      gap: 8px;
+      width: 100%;
+      color: inherit;
+    }
+
+
+    .denuncia .usuario-info {
+      font-weight: 600;
+      color: #000;
+      font-size: 0.95rem;
+      flex: 1;
+    }
+
+
+    .denuncia .meta {
+      font-size: 0.9rem;
+      color: #444;
+      text-align: right;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <img src="assets/imgs/logo.png" alt="Logotipo VoyageBus" width="120" class="logo">
+
+    <a href="cadastro.html" class="button">
+      <img src="assets/imgs/Register_User.png" alt="Cadastrar">
+      <p>CADASTRAR</p>
+    </a>
+
+    <a href="#" class="active">
+      <img src="assets/imgs/Complaint.png" alt="Denúncias">
+      <p>DENÚNCIAS</p>
+    </a>
+
+    <a href="config.html" class="button">
+      <img src="assets/imgs/Settings.png" alt="Configurações">
+      <p>CONFIGURAÇÕES</p>
+    </a>
+  </aside>
+
+  <input type="checkbox" id="toggleMenu" hidden>
+
+  <nav class="menu-bar">
+
+    <label for="toggleMenu" class="menu-toggle">
+      <i class="fa-solid fa-bars"></i>
+
+    </label>
+
+    <a href="denuncia.html" class="button">
+      <img src="assets/imgs/gerenciar.png" alt="Gerenciar Denúncias">
+      <p>Gerenciar Denúncias</p>
+    </a>
+
+    <a href="relatorio.html" class="button">
+      <img src="assets/imgs/relatorio.png" alt="Relatórios e estatísticas">
+      <p>Relatórios e estatísticas</p>
+    </a>
+
+    <a href="registro.html" class="button">
+      <img src="assets/imgs/registro.png" alt="Registro de perdas">
+      <p>Registro de perdas</p>
+    </a>
+
+    <a href="historico.html" class="button">
+      <img src="assets/imgs/historico.png" alt="Histórico de ocorrências">
+      <p>Histórico de ocorrências</p>
+    </a>
+  </nav>
+
+ <header>
+<span id="nome-usuario-logado">Carregando...</span>
+<div class="user-circle"><a href="#"><img src="assets/imgs/user_header.png" alt="User"></a></div>
+</header>
+
+  <main class="content-area">
+            <div class="dashboard-header">
+                  <h1>Registro de Perdas</h1>             <div class="search-box">
+                                        <input type="text" id="pesquisaRegistro" placeholder="PESQUISAR">
+                        <button><i class="fas fa-search"></i></button>
+                    </div>
+              </div>
+     
+            <div class="dashboard-content">
+                              <div class="dashboard-grid">
+                                    </div>
+              </div>
+        </main>
+
+  <div id="modalDetalhes" class="modal">
+        <div class="modal-conteudo">
+            <span class="fechar">&times;</span>
+            <h2>Detalhes da Ocorrência</h2>
+            <p><strong>Usuário:</strong> <span id="det-nome"></span></p>
+            <p><strong>Telefone:</strong> <span id="det-telefone"></span></p>
+            <p><strong>Data:</strong> <span id="det-data"></span></p>
+            <p><strong>Local:</strong> <span id="det-local"></span></p>
+            <p><strong>Descrição:</strong><br><span id="det-descricao" style="white-space: pre-wrap;"></span></p>
+           
+            <div id="anexo-container" style="display:none;">
+                <strong>Anexo:</strong><br>
+                <img id="det-imagem-anexo" src="" alt="Imagem em anexo" style="max-width: 100%;">
+              </div>
+           
+            <div id="finalidade-display"
+        style="display:none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
+                <strong>Finalidade (Resolução):</strong><br>
+                <span id="det-finalidade" style="white-space: pre-wrap;"></span>
+              </div>
+           
+           
+      <hr>
+            <button class="contato"><i class="fas fa-phone"></i> Entrar em Contato</button>
+         
+    </div>
+      </div>
+
+    <footer class="footer">©2025 Todos os direitos reservados para Tech Seul</footer>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+   
+  <script src="functions/registroPerdas.js"></script>
+
+  <footer class="footer">©2025 Todos os direitos reservados para Tech Seul</footer>
+</body>
+
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="assets/estilização/cadas_admin.css" />
+    <link rel="stylesheet" href="assets/estilização/base página/base.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;700&display=swap" rel="stylesheet">
+    <title>Cadastro de Administrador</title>
+    <link rel="icon" type="image/png" href="assets/imgs/logo.png">
+    <style>
+        
+        h1 {
+            font-family: 'Bai Jamjuree', sans-serif;
+            font-weight: 700;
+            color: #333;
+        }
+
+        /* === INPUTS DO FORMULÁRIO === */
+        .form-placeholder {
+            height: 60px;
+            background-color: #9CADFF;
+            border-radius: 12px;
+            padding: 0 20px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .form-placeholder input {
+            font-family: 'Bai Jamjuree', sans-serif;
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 1.2em;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        /* Cor e estilo do placeholder */
+        .form-placeholder input::placeholder {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1em;
+        }
+
+        /* ===== Animação do ícone de gerar credencial ===== */
+        .refresh-icon {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .refresh-icon:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1);
+        }
+
+        @keyframes girar {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .refresh-icon:active img {
+            animation: girar 0.6s linear;
+        }
+
+        #dashboard-adm-content {
+            display: none !important;
+        }
+
+        #dashboard-adm-content {
+            position: absolute;
+            left: 330px;
+            top: 100px;
+            width: calc(100% - 370px);
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            padding: 30px;
+            display: block !important;
+            transition: left 0.3s ease, width 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <img src="assets/imgs/logo.png" alt="Logotipo VoyageBus" width="120" class="logo">
+
+        <a href="cadastro.html" class="button">
+            <img src="assets/imgs/Register_User.png" alt="Cadastrar">
+            <p>CADASTRAR</p>
+        </a>
+
+        <a href="denuncia.html" class="button">
+            <img src="assets/imgs/Complaint.png" alt="Denúncias">
+            <p>DENÚNCIAS</p>
+        </a>
+
+        <a href="config.html" class="button">
+            <img src="assets/imgs/Settings.png" alt="Configurações">
+            <p>CONFIGURAÇÕES</p>
+        </a>
+    </aside>
+
+    <input type="checkbox" id="toggleMenu" hidden>
+
+    <input type="checkbox" id="toggleMenu" hidden>
+    <nav class="menu-bar">
+        <label for="toggleMenu" class="menu-toggle">
+            <i class="fa-solid fa-bars"></i>
+        </label>
+        <a href="cadas_admin.html" class="button">
+            <img src="assets/imgs/admin_panel_settings.png" alt="Segurança">
+            <p>Cadastrar Administrador</p>
+        </a>
+
+        <a href="cadas_moto.html" class="button">
+            <img src="assets/imgs/user_header.png" alt="Usuário">
+            <p>Cadastrar Motorista</p>
+        </a>
+    </nav>
+
+<header>
+<span id="nome-usuario-logado">Carregando...</span>
+<div class="user-circle"><a href="#"><img src="assets/imgs/user_header.png" alt="User"></a></div>
+</header>
+
+    <main>
+        <div id="dashboard-adm-content">
+            <h1>Cadastro de Administrador</h1><br>
+            <form id="admForm" class="form-grid">
+
+                <div class="form-placeholder">
+                    <input type="text" id="nome" placeholder="Nome Completo" required>
+                </div>
+
+                <div class="form-placeholder credencial">
+                    <input type="text" id="credencial" placeholder="Credencial" readonly>
+                    <div class="refresh-icon" id="gerarCredencial">
+                        <img src="assets/imgs/atua.png" alt="Atualizar"
+                            style="width: 20px; height: 20px; filter: invert(100%);">
+                    </div>
+                </div>
+
+                <div class="form-placeholder">
+                    <input type="text" id="cpf" placeholder="CPF" required>
+                </div>
+
+                <div class="form-placeholder">
+                    <input type="text" id="telefone" placeholder="Telefone" required>
+                </div>
+
+                <div class="form-placeholder">
+                    <input type="password" id="senha" placeholder="Senha" required>
+                </div>
+
+                <div class="form-placeholder">
+                    <input type="password" id="confirmarSenha" placeholder="Confirmar Senha" required>
+                </div>
+
+                <button id="btnCadastrar" class="form-button">CADASTRAR</button>
+                <div class="credential-note">
+                    A credencial é gerada de forma única pelo sistema. Recomendamos que a armazene de maneira segura e
+                    não compartilhe nenhuma informação sensível. Em caso de perda da senha, entre em contato com o
+                    departamento de TI para a devida solicitação de recuperação.
+                </div>
+        </div>
+        </form>
+        </div>
+    </main>
+
+    <footer class="footer">©2025 Todos os direitos reservados para Tech Seul</footer>
+    <script type="module">
+        // Importa módulos do Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+        import { getFirestore, collection, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+
+
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBLHKrtSiLBCoXKZr7O6sQYSfG1_0GhC3M",
+            authDomain: "piteste-188ec.firebaseapp.com",
+            databaseURL: "https://piteste-188ec-default-rtdb.firebaseio.com",
+            projectId: "piteste-188ec",
+            storageBucket: "piteste-188ec.appspot.com",
+            messagingSenderId: "619288038856",
+            appId: "1:619288038856:web:0c21cac9811028defac4fd",
+        };
+
+        // Inicializa o Firebase
+        const app = initializeApp(firebaseConfig);
+        // Inicializa os serviços
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // =================================================================
+        // --- ADICIONADO: FUNÇÃO PARA BUSCAR O NOME DO USUÁRIO (v10) ---
+        // =================================================================
+        function buscarNomeDoUsuario() {
+            console.log("Iniciando buscarNomeDoUsuario (v10)...");
+            const spanNomeUsuario = document.getElementById('nome-usuario-logado');
+            if (!spanNomeUsuario) {
+                console.error("ERRO: O span 'nome-usuario-logado' não foi encontrado!");
+                return;
+            }
+
+            onAuthStateChanged(auth, (user) => {
+                console.log("Auth state mudou.");
+                if (user) {
+                    console.log("Usuário detectado:", user.uid);
+                    const nome = user.displayName || user.email || "USUÁRIO";
+                    spanNomeUsuario.innerText = `${nome.toUpperCase()} - ADM`;
+                    console.log(`Nome do usuário atualizado para: ${spanNomeUsuario.innerText}`);
+                } else {
+                    console.log("Nenhum usuário está logado.");
+                }
+            });
+        }
+        // --- FIM DA FUNÇÃO ADICIONADA ---
+
+
+        // Função para gerar credencial única
+        function gerarCredencial() {
+            const numero = Math.floor(100000 + Math.random() * 900000);
+            return `ADM-${numero}`;
+        }
+
+        // Evento de clique no botão de gerar credencial
+        document.getElementById("gerarCredencial").addEventListener("click", () => {
+            const credencialGerada = gerarCredencial();
+            document.getElementById("credencial").value = credencialGerada;
+
+            const email = `${credencialGerada.toLowerCase()}@gmail.com`;
+
+            document.getElementById("credencial").dataset.emailGerado = email;
+        });
+
+        // Evento para cadastrar administrador
+        document.getElementById("btnCadastrar").addEventListener("click", async (e) => {
+            e.preventDefault();
+
+            const nome = document.getElementById("nome").value.trim();
+            const cpf = document.getElementById("cpf").value.trim();
+            const telefone = document.getElementById("telefone").value.trim();
+            const senha = document.getElementById("senha").value;
+            const confirmarSenha = document.getElementById("confirmarSenha").value;
+            const credencial = document.getElementById("credencial").value;
+            const email = document.getElementById("credencial").dataset.emailGerado || "";
+
+            if (!nome || !cpf || !telefone || !senha || !confirmarSenha || !credencial) {
+                alert("Por favor, preencha todos os campos e gere uma credencial.");
+                return;
+            }
+
+            if (email === "") {
+                alert("Por favor, clique no ícone para gerar uma credencial e um email.");
+                return;
+            }
+
+            if (senha !== confirmarSenha) {
+                alert("As senhas não coincidem!");
+                return;
+            }
+
+            if (senha.length < 6) {
+                alert("A senha deve ter no mínimo 6 caracteres.");
+                return;
+            }
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+                const user = userCredential.user;
+                const uid = user.uid;
+
+                await setDoc(doc(db, "usuarios_adm", uid), {
+                    uid: uid,
+                    nome,
+                    cpf,
+                    telefone,
+                    credencial,
+                    email,
+                    tipo: "admin",
+                    criadoEm: new Date().toISOString()
+                });
+
+                alert(`Administrador cadastrado com sucesso!\nEmail de login: ${email}`);
+
+                document.getElementById("admForm").reset();
+
+                document.getElementById("credencial").value = "";
+                document.getElementById("credencial").dataset.emailGerado = "";
+
+            } catch (e) {
+                console.error("Erro ao cadastrar:", e);
+
+                if (e.code === 'auth/email-already-in-use') {
+                    alert("Erro: Este e-mail (credencial) já foi cadastrado. Gere uma nova credencial.");
+                } else if (e.code === 'auth/weak-password') {
+                    alert("Erro: A senha é muito fraca. Use pelo menos 6 caracteres.");
+                } else {
+                    alert("Erro ao cadastrar administrador: " + e.message);
+                }
+            }
+        });
+
+        // ADICIONADO: Chama a função para verificar o nome do usuário
+        buscarNomeDoUsuario();
+    </script>
+</body>
+
+</html>

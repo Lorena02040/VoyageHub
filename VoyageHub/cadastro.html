@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assets/estilização/cadastro.css" />
+    <link rel="stylesheet" href="assets/estilização/base página/base.css" />
+    <title>Dashboard de Gerenciamento</title>
+    <link rel="icon" type="image/png" href="assets/imgs/logo.png">
+    <style>
+  .fa, .fa-solid, .fas, .far, .fal, .fab {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+}
+    * {
+      font-family: "Bai Jamjuree", sans-serif !important;
+    }
+    .user-circle { width: 34px; height: 34px; border-radius: 50%; background: #fff; }
+        .denuncia .topo {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .denuncia .usuario-info {
+            font-weight: 600;
+            color: #000;
+            font-size: 0.95rem;
+            flex: 1;
+        }
+
+        .denuncia .meta {
+            font-size: 0.9rem;
+            color: #444;
+            text-align: right;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <img src="assets/imgs/logo.png" alt="Logotipo VoyageBus" width="120" class="logo">
+        <a href="cadastro.html" class="active">
+            <img src="assets/imgs/Register_User.png">
+            <p>CADASTRAR</p>
+        </a>
+
+        <a href="denuncia.html" class="button">
+            <img src="assets/imgs/Complaint.png">
+            <p>DENÚNCIAS</p>
+        </a>
+
+        <a href="config.html" class="button">
+            <img src="assets/imgs/Settings.png">
+            <p>CONFIGURAÇÕES</p>
+        </a>
+    </aside>
+
+    <input type="checkbox" id="toggleMenu" hidden>
+    <nav class="menu-bar">
+        <label for="toggleMenu" class="menu-toggle">
+            <i class="fa-solid fa-bars"></i>
+        </label>
+        <a href="cadas_admin.html" class="button">
+            <img src="assets/imgs/admin_panel_settings.png" alt="Segurança">
+            <p>Cadastrar Administrador</p>
+        </a>
+         
+        <a href="cadas_moto.html" class="button">
+            <img src="assets/imgs/user_header.png" alt="Usuário">
+            <p>Cadastrar Motorista</p>
+        </a>
+    </nav>
+
+<header>
+<span id="nome-usuario-logado">Carregando...</span>
+<div class="user-circle"><a href="#"><img src="assets/imgs/user_header.png" alt="User"></a></div>
+</header>
+
+    <main>
+        <h1 class="dashboard-title">Dashboard de Gerenciamento</h1>
+        <div class="dashboard">
+            <div class="dashboard-left">
+                <div class="status-list">
+                    <div class="status-item">
+                        <span class="dot red-dot"></span>
+                        <p>Não iniciadas: <strong id="count-nao-iniciado">0</strong></p>
+                    </div>
+                    <div class="status-item">
+                        <span class="dot yellow-dot"></span>
+                        <p>Em análise: <strong id="count-em-analise">0</strong></p>
+                    </div>
+                    <div class="status-item">
+                        <span class="dot green-dot"></span>
+                        <p>Finalizadas: <strong id="count-finalizado">0</strong></p>
+                    </div>
+                </div>
+                <hr class="divider">
+                <button id="atualizar-btn">ATUALIZAR DASHBOARD</button>
+                <button onclick="window.location.href='controleCarrinhos/controleCarrinho.html'">CONTROLE DE
+                    CARRINHOS</button>
+                <button>CRIAR AVISO INTERNO</button>
+            </div>
+            <div class="dashboard-right">
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">©2025 Todos os direitos reservados para Tech Seul</footer>
+
+    <div id="modalDetalhes" class="modal">
+        <div class="modal-conteudo">
+            <span class="fechar">&times;</span>
+            <h2>Detalhes da Denúncia</h2>
+            <p><strong>Data e Hora:</strong> <span id="det-data"></span></p>
+            <p><strong>Utilizador:</strong> <span id="det-nome"></span></p>
+            <p><strong>Telefone:</strong> <span id="det-telefone"></span></p>
+            <p><strong>Onde Ocorreu:</strong> <span id="det-local"></span></p>
+            <p><strong>Descrição:</strong></p>
+            <p id="det-descricao" style="background-color: #f0f0f0; padding: 10px; border-radius: 5px;"></p>
+             
+            <div id="finalidade-container">
+                <label for="finalidade-texto"><strong>Descreva a finalização da ocorrência:</strong></label>
+                <textarea id="finalidade-texto" rows="3"></textarea>
+            </div>
+
+            <div class="modal-acoes">
+                <button class="iniciar">Iniciar Análise</button>
+                <button class="finalizar">Finalizar Ocorrência</button>
+                <button class="contato">Ligar para Utilizador</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">©2025 Todos os direitos reservados para Tech Seul</footer>
+
+     
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+     
+    <script>
+        // =================================================================
+        // SCRIPT INTEGRADO DO DASHBOARD (COM ATUALIZAÇÃO EM TEMPO REAL) - CORRIGIDO
+        // =================================================================
+
+        // --- 1. CONFIGURAÇÃO E INICIALIZAÇÃO DO FIREBASE ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyBLHKrtSiLBCoXKZr7O6sQYSfG1_0GhC3M",
+            authDomain: "piteste-188ec.firebaseapp.com",
+            databaseURL: "https://piteste-188ec-default-rtdb.firebaseio.com",
+            projectId: "piteste-188ec",
+            storageBucket: "piteste-188ec.appspot.com",
+            messagingSenderId: "619288038856",
+            appId: "1:619288038856:web:0c21cac9811028defac4fd",
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const auth = firebase.auth();
+
+        // --- 2. FUNÇÕES AUXILIARES ---
+        function formatarTimestamp(timestamp) {
+            if (!timestamp) return "Data não informada";
+            const dt = new Date(timestamp);
+            const dia = String(dt.getDate()).padStart(2, '0');
+            const mes = String(dt.getMonth() + 1).padStart(2, '0');
+            const ano = dt.getFullYear();
+            const hora = String(dt.getHours()).padStart(2, '0');
+            const minutos = String(dt.getMinutes()).padStart(2, '0');
+            return `${dia}/${mes}/${ano} ${hora}:${minutos}`;
+        }
+
+        // --- 3. LÓGICA DO MODAL DE DETALHES ---
+        const modal = document.getElementById("modalDetalhes");
+        const fecharBtn = modal.querySelector(".fechar");
+        fecharBtn.onclick = () => modal.style.display = "none";
+        window.onclick = event => {
+            if (event.target == modal) modal.style.display = "none";
+        };
+
+        function mostrarDetalhes(denuncia) {
+            document.getElementById('det-data').innerText = formatarTimestamp(denuncia.timestamp);
+            document.getElementById('det-nome').innerText = denuncia.nome_usuario || "Não informado";
+            document.getElementById('det-telefone').innerText = denuncia.telefone_contato || "Não informado";
+            document.getElementById('det-local').innerText = denuncia.onde_ocorreu || "Não informado";
+            document.getElementById('det-descricao').innerText = denuncia.descricao || "Sem descrição";
+
+            const finalidadeContainer = document.getElementById("finalidade-container");
+            const finalidadeInput = document.getElementById("finalidade-texto");
+            finalidadeInput.value = denuncia.finalidade || "";
+            finalidadeContainer.style.display = "none";
+
+            document.querySelector('.iniciar').onclick = () => atualizarStatus(denuncia.id, 'vizualizado');
+
+            document.querySelector('.contato').onclick = () => {
+                if (denuncia.telefone_contato) window.location.href = `tel:${denuncia.telefone_contato}`;
+                else alert("Telefone não informado.");
+            }
+
+            document.querySelector('.finalizar').onclick = () => {
+                finalidadeContainer.style.display = 'block';
+                const botaoSalvarExistente = document.getElementById("botao-salvar-final");
+                if (botaoSalvarExistente) botaoSalvarExistente.remove();
+
+                const botaoSalvar = document.createElement('button');
+                botaoSalvar.innerText = "Salvar Finalização";
+                botaoSalvar.className = "salvar-finalizacao";
+                botaoSalvar.id = "botao-salvar-final";
+                finalidadeContainer.appendChild(botaoSalvar);
+
+                botaoSalvar.onclick = () => {
+                    const finalidade = finalidadeInput.value.trim();
+                    if (finalidade === "") {
+                        alert("Informe a finalidade antes de finalizar.");
+                        return;
+                    }
+                    atualizarStatus(denuncia.id, 'resolvido', finalidade);
+                };
+            };
+
+            modal.style.display = "block";
+        }
+
+        async function atualizarStatus(id, novoStatus, finalidade = "") {
+            const updates = {};
+            updates[`/denuncias/${id}/status`] = novoStatus;
+            updates[`/denuncias/${id}/timestampAtualizacao`] = firebase.database.ServerValue.TIMESTAMP;
+            if (finalidade) {
+                updates[`/denuncias/${id}/finalidade`] = finalidade;
+            }
+
+            try {
+                await db.ref().update(updates);
+                modal.style.display = "none";
+            } catch (error) {
+                console.error("Erro ao atualizar status:", error);
+                alert("Erro ao atualizar status!");
+            }
+        }
+
+        // --- 4. LÓGICA DE CARREGAMENTO E EXIBIÇÃO EM TEMPO REAL ---
+        function iniciarDashboardEmTempoReal() {
+            console.log("Iniciando dashboard em tempo real...");
+            const denunciasRef = db.ref('denuncias');
+            const container = document.querySelector('.dashboard-right');
+            container.innerHTML = '<p style="text-align: center;">A carregar denúncias em tempo real...</p>';
+
+            denunciasRef.on('value', snapshot => {
+                console.log("Recebeu dados das denúncias.");
+                if (!snapshot.exists()) {
+                    document.getElementById('count-nao-iniciado').innerText = 0;
+                    document.getElementById('count-em-analise').innerText = 0;
+                    document.getElementById('count-finalizado').innerText = 0;
+                    container.innerHTML = '<p style="text-align: center;">Nenhuma denúncia encontrada.</p>';
+                    return;
+                }
+
+                const denunciasData = snapshot.val();
+                const denunciasArray = Object.keys(denunciasData).map(key => ({
+                    id: key, ...denunciasData[key]
+                }));
+
+                let naoIniciado = 0, emAnalise = 0, finalizado = 0;
+                denunciasArray.forEach(denuncia => {
+                    if (denuncia.status === 'nova') naoIniciado++;
+                    else if (denuncia.status === 'vizualizado') emAnalise++;
+                    else if (denuncia.status === 'resolvido') finalizado++;
+                });
+
+                document.getElementById('count-nao-iniciado').innerText = naoIniciado;
+                document.getElementById('count-em-analise').innerText = emAnalise;
+                document.getElementById('count-finalizado').innerText = finalizado;
+
+                denunciasArray.sort((a, b) => b.timestamp - a.timestamp);
+                const recentes = denunciasArray.slice(0, 3);
+
+                container.innerHTML = '';
+                if (recentes.length === 0) {
+                    container.innerHTML = '<p style="text-align: center;">Nenhuma denúncia recente encontrada.</p>';
+                    return;
+                }
+
+                recentes.forEach(denuncia => {
+                    let corClasse = '';
+                    switch (denuncia.status) {
+                        case 'nova': corClasse = 'red'; break;
+                        case 'vizualizado': corClasse = 'yellow'; break;
+                        case 'resolvido': corClasse = 'green'; break;
+                        default: corClasse = 'gray';
+                    }
+
+                    const dataCompletaFormatada = formatarTimestamp(denuncia.timestamp);
+
+                    const card = document.createElement('div');
+                    card.className = `denuncia ${corClasse}`;
+                    card.onclick = () => mostrarDetalhes(denuncia);
+                    card.innerHTML = `
+            <div class="topo">
+                <span class="usuario-info">USUÁRIO: ${denuncia.nome_usuario || 'Anônimo'}</span>
+                <span class="meta">${dataCompletaFormatada}</span>
+            </div>
+            <p>
+               <strong>OCORRÊNCIA:</strong> ${denuncia.tipo_ocorrencia || 'Não informada'}<br>
+               <strong>ONDE OCORREU:</strong> ${denuncia.onde_ocorreu || 'Não informado'}
+            </p>
+           `;
+                    container.appendChild(card);
+                });
+
+            }, error => {
+                console.error("Erro no listener do Firebase:", error);
+                container.innerHTML = `<p style="color: #dc3545; text-align: center;">Erro de conexão com a base de dados.</p>`;
+            });
+        }
+
+        // --- 5. FUNÇÃO (MAIS SEGURA) PARA BUSCAR O NOME ---
+        function buscarNomeDoUsuario() {
+            console.log("Iniciando buscarNomeDoUsuario...");
+            const spanNomeUsuario = document.getElementById('nome-usuario-logado');
+
+            if (!spanNomeUsuario) {
+                console.error("ERRO GRAVE: O span 'nome-usuario-logado' não foi encontrado no HTML!");
+                return;
+            }
+
+            auth.onAuthStateChanged(user => {
+                console.log("Auth state mudou.");
+                if (user) {
+                    console.log("Usuário detectado:", user.uid);
+
+                    const nome = user.displayName || user.email || "USUÁRIO";
+
+                    spanNomeUsuario.innerText = `${nome.toUpperCase()} - ADM`;
+                    console.log(`Nome do usuário atualizado para: ${spanNomeUsuario.innerText}`);
+                } else {
+                    console.log("Nenhum usuário está logado.");
+                }
+            });
+        }
+
+        // --- 6. INICIALIZAÇÃO (MODIFICADA) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("DOM carregado. Iniciando scripts...");
+
+            iniciarDashboardEmTempoReal();
+
+            buscarNomeDoUsuario();
+
+            const atualizarBtn = document.getElementById('atualizar-btn');
+            if (atualizarBtn) {
+                atualizarBtn.disabled = true;
+                atualizarBtn.style.cursor = 'not-allowed';
+                atualizarBtn.style.backgroundColor = '#999';
+                atualizarBtn.title = 'O dashboard atualiza automaticamente em tempo real';
+            } else {
+                console.warn("Botão 'atualizar-btn' não encontrado.");
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>

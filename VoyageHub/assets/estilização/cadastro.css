@@ -1,0 +1,358 @@
+/* ===== VARIÁVEIS GLOBAIS ===== */
+:root {
+  --azul: #354a9b;
+  --azul-escuro: #2c3e91;
+  --bg: #dbe2f0;
+  --white: #fff;
+  --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== RESET E PADRÕES ===== */
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+}
+
+.menu-toggle .fa-bars {
+  color: var(--azul); /* Define a cor azul do seu projeto */
+  font-size: 28px;  /* Ajusta o tamanho se necessário */
+}
+
+/* ====== SIDEBAR PRINCIPAL ====== */
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 250px;
+  background: var(--azul);
+  color: #fff;
+  padding: 18px 12px;
+  border-top-right-radius: 52px;
+  border-bottom-right-radius: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 101;
+}
+.sidebar .logo {
+  width: 150px;
+  height: auto;
+  margin: 6px 0 24px;
+}
+.sidebar a {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 14px;
+  transition: 0.2s;
+}
+.sidebar a img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+.sidebar a:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ====== TOPO (HEADER) ====== */
+.topbar {
+  position: fixed;
+  left: 250px;
+  right: 0;
+  top: 0;
+  height: 72px;
+  background: #5d73da;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px;
+  z-index: 99;
+}
+.topbar h1 {
+  font-size: 28px;
+  font-style: italic;
+  margin: 0;
+}
+.userbox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: bold;
+}
+.userbox img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+}
+
+/* ====== MENU BAR (SEÇÃO CORRIGIDA E UNIFICADA) ====== */
+.menu-bar {
+  position: fixed;
+  top: 120px;
+  left: 250px;
+  width: 210px;
+  background: #fff;
+  border-radius: 36px;
+  padding: 16px 0; /* Espaçamento vertical interno */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px; /* Espaçamento entre os itens */
+  box-shadow: var(--card-shadow);
+  z-index: 85;
+  transition: width 0.3s ease, padding 0.3s ease;
+}
+
+/* botão de toggle */
+.menu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 100%;
+  padding: 10px 15px;
+  gap: 12px;
+}
+.menu-toggle img {
+  width: 28px;
+  height: 28px;
+}
+
+/* Configurações dos links */
+.menu-bar a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  padding: 10px 35px;
+  width: 100%;
+  color: #333;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+.menu-bar a:hover {
+  background-color: #f0f0f0;
+}
+.menu-bar a img {
+  width: 28px;
+  height: 28px;
+}
+
+/* Estilo para o item ativo no menu secundário */
+.menu-bar a.active-sub {
+  background-color: #f0f0f0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Esconde o texto por padrão e impede a quebra de linha */
+.menu-bar a p,
+.menu-toggle p {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.1s;
+  white-space: nowrap; /* Impede que o texto quebre em duas linhas */
+}
+
+/* QUANDO O CHECKBOX É MARCADO (MENU ABERTO) */
+#toggleMenu:checked ~ .menu-bar {
+  width: 320px; /* Largura ajustada para o texto não quebrar */
+  align-items: flex-start;
+  padding: 16px;
+}
+#toggleMenu:checked ~ .menu-bar a,
+#toggleMenu:checked ~ .menu-bar .menu-toggle {
+  justify-content: flex-start;
+  padding: 10px 35px;
+}
+
+/* Mostra os textos quando expandido */
+#toggleMenu:checked ~ .menu-bar a p,
+#toggleMenu:checked ~ .menu-bar .menu-toggle p {
+  display: block;
+  opacity: 1;
+}
+
+/* ====== CONTEÚDO CENTRAL ====== */
+main {
+  padding-left: 500px; /* sidebar (250) + menu-bar (210) + margem */
+  padding-top: 90px; /* espaço do header */
+  padding-right: 16px;
+  padding-bottom: 50px; /* espaço para o rodapé */
+  transition: padding-left 0.3s ease;
+}
+
+#toggleMenu:checked ~ .menu-bar ~ main {
+  padding-left: 600px; /* sidebar (250) + menu-bar expandido (320) + margem */
+}
+
+.dash-wrap {
+  /* Este seletor pode ser removido se 'main' controlar todo o padding */
+}
+
+.dashboard {
+  background: #fff;
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: var(--card-shadow);
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 14px;
+  border-left: 1px solid #dcdde7;
+  border-top: 1px solid #dcdde7;
+}
+
+.dashboard-left {
+  border-right: 3.5px solid #dcdde7;
+  padding-right: 14px;
+}
+
+.dashboard-right {
+  padding-left: 14px;
+}
+
+.status-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* espaço entre os cards */
+  margin-bottom: 20px;
+}
+
+.status-item {
+  background: #d4d0d0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+  gap: 10px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0; /* impede a bolinha de encolher */
+}
+.red-dot { background-color: #dc3545; }
+.orange-dot { background-color: #fd7e14; }
+.yellow-dot { background-color: #ffc107; }
+.green-dot { background-color: #28a745; }
+
+.col-left .btn {
+  background: var(--azul);
+  color: #fff;
+  border: 0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.col-left .btn:hover {
+  background: var(--azul-escuro);
+}
+
+.divider {
+  border: none;
+  border-top: 3.5px solid #dcdde7;
+  width: 100%;
+  border-radius: 2px;
+  margin: 16px 0;
+}
+
+.denuncia {
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  position: relative;
+}
+.denuncia header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  background: none; /* Resetando estilo de header genérico */
+  position: static;
+  height: auto;
+  padding: 0;
+  color: inherit;
+}
+.denuncia .meta {
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.red {
+  background: #f9d8dc;
+  border-left: 6px solid #dc3545;
+}
+.yellow {
+  background: #fff1c9;
+  border-left: 6px solid #f3c221;
+}
+.green {
+  background: #d9f2dc;
+  border-left: 6px solid #28a745;
+}
+
+/* ====== RODAPÉ ====== */
+.footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #5d73da;
+  color: #fff;
+  text-align: center;
+  padding: 8px 12px;
+  font-weight: 600;
+  z-index: 100; /* Acima de outros elementos */
+}
+
+/* ====== RESPONSIVO ====== */
+@media (max-width: 1200px) {
+  .dashboard {
+    grid-template-columns: 250px 1fr;
+  }
+}
+
+@media (max-width: 992px) {
+  .sidebar {
+    width: 200px;
+  }
+  .topbar {
+    left: 200px;
+  }
+  .menu-bar {
+    left: 200px;
+  }
+  main {
+    padding-left: 440px; /* sidebar (200) + menu-bar (210) + margem */
+  }
+  #toggleMenu:checked ~ .menu-bar ~ main {
+    padding-left: 550px; /* sidebar (200) + menu-bar expandido (320) + margem */
+  }
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-left {
+    border-right: none;
+    padding-right: 0;
+  }
+  .dashboard-right {
+    padding-left: 0;
+  }
+}

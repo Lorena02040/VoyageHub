@@ -1,0 +1,260 @@
+/* ====== VARIÁVEIS GLOBAIS ====== */
+    :root {
+      --azul: #354a9b;
+      --azul-escuro: #2c3e91;
+      --bg: #dbe2f0;
+      --white: #fff;
+      --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ====== SIDEBAR ====== */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 200px;
+      background: var(--azul);
+      border-top-right-radius: 40px;
+      border-bottom-right-radius: 40px;
+      font-weight: bold;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 10px;
+      color: #fff;
+    }
+    .sidebar img {
+      margin-bottom: 20px;
+    }
+    .sidebar a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: #fff;
+      margin: 20px 0;
+    }
+    .sidebar a img {
+      width: 36px;
+      height: 36px;
+      margin-bottom: 6px;
+    }
+
+    /* ====== MENU SECUNDÁRIO ====== */
+    .menu-bar {
+      position: fixed;
+      top: 100px; /* Alinha o menu ao topo */
+      left: 180px; /* Posiciona o menu 200px da esquerda, após a sidebar */
+      height: 65%; /* Ocupa 100% da altura da tela */
+      width: 120px; /* Define a largura do menu */
+      background: #fff;
+      border-radius: 20px;
+      padding: 20px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+      box-shadow: var(--card-shadow);
+      z-index: 98; /* Adicionado z-index para garantir visibilidade */
+    }
+    .menu-bar img {
+      width: 28px;
+      height: 28px;
+    }
+
+    /* ====== HEADER ====== */
+    header {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 60px;
+      background: #5d73da;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 20px;
+      font-weight: bold;
+      z-index: 99;
+    }
+    header img {
+      width: 32px;
+      height: 32px;
+    }
+
+    /* ====== CONTEÚDO ====== */
+    main {
+      flex: 1;
+      padding-left: 350px; /* espaço sidebar + menu-bar */
+      padding-top: 80px;
+      padding-right: 40px;
+    }
+    .dashboard-title {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .dashboard {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 20px;
+    }
+    .dashboard-left {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .dashboard-left button {
+      background: var(--azul);
+      color: #fff;
+      border: 0;
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .dashboard-left button:hover {
+      background: var(--azul-escuro);
+    }
+
+    .dashboard-right {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .denuncia {
+      border-radius: 14px;
+      padding: 14px 16px;
+    }
+    .red {
+      background: #f9d8dc;
+      border-left: 6px solid #dc3545;
+    }
+    .yellow {
+      background: #fff1c9;
+      border-left: 6px solid #f3c221;
+    }
+    .green {
+      background: #d9f2dc;
+      border-left: 6px solid #28a745;
+    }
+
+    /* ====== FOOTER ====== */
+    .footer {
+      background: #5d73da;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+      font-weight: 600;
+    }
+
+    /* ====== RESPONSIVO ====== */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 72px;
+      }
+      .sidebar a p {
+        display: none;
+      }
+      .menu-bar {
+        left: 90px;
+      }
+      main {
+        padding-left: 180px;
+      }
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+
+.modal {
+    display: none; /* Escondido por padrão */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5); /* Fundo preto semi-transparente */
+}
+
+/* Conteúdo do Modal */
+.modal-conteudo {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px 30px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    position: relative;
+}
+
+/* Botão de fechar (X) */
+.fechar {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+.fechar:hover,
+.fechar:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Detalhes dentro do modal */
+.detalhes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 20px;
+}
+.detalhes-grid .descricao {
+    grid-column: 1 / -1; /* Ocupa as duas colunas */
+}
+.detalhes-grid p {
+    margin: 5px 0;
+}
+
+/* Botões de Ação */
+.modal-acoes {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+}
+.modal-acoes button, .salvar-finalizacao {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+.iniciar { background-color: #f39c12; }
+.contato { background-color: #3498db; }
+.finalizar { background-color: #e74c3c; }
+.salvar-finalizacao { background-color: #27ae60; margin-top: 10px; }
+.user-circle { width: 34px; height: 34px; border-radius: 50%; background: #fff; }

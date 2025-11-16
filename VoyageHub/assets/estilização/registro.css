@@ -1,0 +1,417 @@
+/* ===== VARIÁVEIS GLOBAIS ===== */
+:root {
+--azul: #354a9b;
+--azul-escuro: #2c3e91;
+--bg: #dbe2f0;
+--white: #fff;
+--card-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== RESET E PADRÕES ===== */
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+html,
+body {
+height: 100%;
+}
+body {
+font-family: Arial, sans-serif;
+background: var(--bg);
+}
+
+/* ===== SIDEBAR PRINCIPAL ===== */
+.sidebar {
+position: fixed;
+inset: 0 auto 0 0;
+width: 200px;
+background: var(--azul);
+color: #fff;
+border-top-right-radius: 40px;
+border-bottom-right-radius: 40px;
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 20px 10px;
+z-index: 101;
+}
+.sidebar .logo {
+width: 150px;
+height: auto;
+margin: 6px 0 24px;
+}
+.sidebar a {
+width: 100%;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 6px;
+padding: 14px 16px;
+color: #fff;
+text-decoration: none;
+border-radius: 14px;
+transition: 0.2s;
+font-weight: bold;
+margin-bottom: 30px;
+}
+.sidebar a:last-of-type {
+margin-bottom: 0;
+}
+.sidebar a img {
+width: 40px;
+height: 40px;
+object-fit: contain;
+}
+.sidebar a:hover {
+background: rgba(255, 255, 255, 0.08);
+}
+.sidebar a.active {
+background: #f0f0f045;
+color: var(--white);
+box-shadow: var(--card-shadow);
+padding: 24px 16px;
+margin-bottom: 30px;
+}
+
+/* ===== HEADER (CORRIGIDO) ===== */
+header {
+position: fixed;
+width: 100%;
+right: 0;
+top: 0;
+height: 60px;
+background: #5d73da;
+color: #fff;
+display: flex;
+align-items: center;
+justify-content: flex-end;
+padding: 0 20px;
+font-weight: bold;
+z-index: 100;
+transition: left 0.3s ease;
+}
+header img {
+width: 32px;
+height: 32px;
+}
+header span {
+margin-right: 10px;
+}
+.user-circle {
+width: 34px;
+height: 34px;
+border-radius: 50%;
+background: #fff;
+}
+
+/* ===== MENU SECUNDÁRIO (CORRIGIDO) ===== */
+.menu-bar {
+position: fixed;
+top: 120px;
+left: 200px;
+width: 90px;
+background: var(--white);
+border-bottom-right-radius: 36px;
+border-top-right-radius: 36px;
+border-bottom-left-radius: 0px;
+border-top-left-radius: 0px;
+padding: 16px 0;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 22px;
+box-shadow: var(--card-shadow);
+z-index: 85;
+transition: width 0.3s ease, padding 0.3s ease, left 0.3s ease;
+}
+.menu-toggle {
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+width: 100%;
+padding: 10px 15px;
+gap: 12px;
+}
+.menu-toggle img {
+width: 28px;
+height: 28px;
+}
+.menu-bar a {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 12px;
+padding: 10px 0;
+width: 100%;
+color: #333;
+text-decoration: none;
+border-radius: 8px;
+transition: background-color 0.2s;
+}
+.menu-bar a:hover {
+background-color: #f0f0f0;
+}
+.menu-bar a img {
+width: 28px;
+height: 28px;
+}
+.menu-bar a p,
+.menu-toggle p {
+display: none;
+opacity: 0;
+transition: opacity 0.1s;
+white-space: nowrap;
+}
+.menu-bar a.active-sub {
+background-color: #f0f0f0;
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+#toggleMenu:checked ~ .menu-bar {
+width: 280px;
+align-items: flex-start;
+padding: 16px;
+}
+#toggleMenu:checked ~ .menu-bar a,
+#toggleMenu:checked ~ .menu-bar .menu-toggle {
+justify-content: flex-start;
+padding: 10px 30px;
+}
+#toggleMenu:checked ~ .menu-bar a p,
+#toggleMenu:checked ~ .menu-bar .menu-toggle p {
+display: block;
+opacity: 1;
+}
+
+/* ====== ÁREA DE CONTEÚDO PRINCIPAL ====== */
+.content-area {
+padding-left: 310px; /* sidebar(200) + menu-bar(90) + espaço(20) */
+padding-top: 90px;
+padding-right: 40px;
+padding-bottom: 80px;
+transition: padding-left 0.3s ease;
+}
+#toggleMenu:checked ~ .content-area {
+padding-left: 510px; /* sidebar(200) + menu-bar ABERTO(280) + espaço(30) */
+}
+.dashboard-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 20px;
+}
+.dashboard-header h1 {
+font-size: 24px;
+font-weight: 700;
+color: #333;
+}
+.search-box {
+display: flex;
+border-radius: 8px;
+overflow: hidden;
+background-color: var(--white);
+box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+border: 1px solid #ddd;
+}
+.search-box input {
+border: none;
+padding: 10px 15px;
+font-size: 14px;
+background: transparent;
+outline: none;
+}
+.search-box input::placeholder {
+color: var(--azul);
+font-weight: 500;
+}
+.search-box button {
+background: var(--azul);
+border: none;
+padding: 0 15px;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.search-box button i {
+color: var(--white);
+font-size: 16px;
+}
+
+/* CONTAINER BRANCO E GRID DE CARDS */
+.dashboard-content {
+background: var(--white);
+border-radius: 18px;
+padding: 25px;
+box-shadow: var(--card-shadow);
+}
+.dashboard-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+gap: 20px;
+}
+/* REMOVIDO DAQUI:
+  - .loss-card
+  - .loss-card header
+  - .loss-card .card-meta
+  - .loss-card .status-dot
+  - .loss-card .card-body p
+  - .loss-card strong
+  
+  Esses estilos agora estão no arquivo 'cards.css'
+*/
+
+
+/* ===== RODAPÉ ===== */
+.footer {
+position: fixed;
+left: 0;
+right: 0;
+bottom: 0;
+background: #5d73da;
+color: #fff;
+text-align: center;
+padding: 8px 12px;
+font-weight: 600;
+z-index: 100;
+}
+
+/* ===== RESPONSIVO (SEÇÃO UNIFICADA) ===== */
+@media (max-width: 992px) {
+/* Nenhuma regra específica de layout principal aqui */
+}
+
+@media (max-width: 768px) {
+.sidebar {
+width: 72px;
+padding: 14px 6px;
+}
+.sidebar a {
+justify-content: center;
+padding: 10px 0;
+gap: 4px;
+margin-bottom: 10px;
+}
+.sidebar a.active {
+padding: 14px 0;
+}
+header {
+left: 72px;
+}
+.menu-bar {
+left: 72px;
+width: 60px;
+padding: 10px 0;
+}
+.menu-toggle p {
+display: none !important;
+}
+.content-area {
+padding-left: 142px; /* sidebar(72) + menu-bar(60) + espaço(10) */
+padding-right: 20px;
+}
+#toggleMenu:checked ~ .content-area {
+padding-left: 292px; /* sidebar(72) + menu-bar ABERTO(200) + espaço(20) */
+}
+#toggleMenu:checked ~ .menu-bar {
+width: 200px; /* Menu expandido menor em telas pequenas */
+}
+.dashboard-header {
+flex-direction: column;
+align-items: flex-start;
+gap: 15px;
+}
+.search-box {
+width: 100%;
+}
+}
+
+.menu-toggle .fa-bars {
+color: var(--azul); /* Define a cor azul do seu projeto */
+font-size: 28px; /* Ajusta o tamanho se necessário */
+}
+
+   /* ============================================= */
+/* ARQUIVO: assets/estilização/cards.css (NOVO)  */
+/* ============================================= */
+
+/* A base do card, usada por todas as cores */
+.denuncia {
+    
+    background-color: #ffffff;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid #ccc; /* Uma borda padrão */
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.denuncia:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* O cabeçalho do card (Usuário + Data) */
+.denuncia header {
+    display: flex;
+    justify-content: space-between; /* Joga o usuário para a esquerda e a data para a direita */
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.denuncia header .usuario-info {
+    font-weight: 600; /* Deixa o "USUÁRIO: Nome" em negrito */
+    font-size: 1.1em;
+    color: #333;
+}
+
+.denuncia header .meta {
+    font-size: 0.9em;
+    color: #777;
+}
+
+/* O corpo do card (Ocorrência + Local) */
+.denuncia p {
+  font-size: 14px;
+      margin: 4px 0 0 0;
+    line-height: 1.5;
+    color: #444;
+}
+
+.denuncia p strong {
+    color: #111;
+}
+
+/* --- AS CORES (Baseado na sua imagem) --- */
+
+/* VERMELHO (Para denúncias 'novas') */
+.denuncia.red {
+  background: #f9d8dc;
+  border-left: 6px solid #dc3545;
+  border-top: 4px solid #e57373;
+}
+.denuncia.red header .usuario-info {
+    color: #c62828; /* Texto do usuário vermelho escuro */
+}
+
+/* VERDE (Para denúncias 'resolvidas') */
+.denuncia.green {
+    border-left-color: #81c784; /* Borda verde */
+    background-color: #e8f5e9; /* Fundo verde bem claro */
+}
+.denuncia.green header .usuario-info {
+    color: #2e7d32; /* Texto do usuário verde escuro */
+}
+
+/* AMARELO (Para denúncias 'em_andamento') */
+.denuncia.yellow {
+    border-left-color: #ffd54f; /* Borda amarela */
+    background-color: #fffde7; /* Fundo amarelo bem claro */
+}
+.denuncia.yellow header .usuario-info {
+    color: #f9a825; /* Texto do usuário amarelo escuro */
+}
