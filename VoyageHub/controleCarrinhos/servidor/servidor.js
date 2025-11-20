@@ -18,11 +18,11 @@ app.use(cors());
 app.use(express.json());
 const PORT = 3000;
 
-// ... (WebSocket, broadcastAlert, monitorarCarrinhos... tudo igual) ...
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 const clients = new Set();
 
+// --- LÓGICA DO WEBSOCKET ---
 wss.on("connection", (ws) => {
   console.log("Cliente (painel) conectado ao WebSocket.");
   clients.add(ws);
@@ -41,6 +41,7 @@ function broadcastAlert(alerta) {
   }
 }
 
+// --- 1. MONITORAMENTO DE SENSORES (BEACONS) ---
 const monitorarCarrinhos = () => {
   const carrinhosRef = db.ref("carrinho");
 
@@ -61,12 +62,14 @@ const monitorarCarrinhos = () => {
             const saida = docData.ultima_saida || "A";
             console.log(`⚠️ Carrinho ${id} não retornou pela saída ${saida}. Enviando alerta...`);
 
+            // Envia para o WebSocket (Avisa o Frontend)
             broadcastAlert({
               tipo: "ALERTA_CARRINHO",
               carrinhoId: id,
               saida: saida,
             });
 
+            // Salva no histórico
             await db.ref("alertas").push({
               carrinhoId: id,
               mensagem: `Carrinho ${id} passou pela saída ${saida} e não retornou.`,
@@ -95,35 +98,80 @@ const monitorarCarrinhos = () => {
   console.log("Monitorando Realtime Database (carrinho)...");
 };
 
-monitorarCarrinhos();
+// --- 2. NOVO: MONITORAMENTO DA IA (CÂMERA) ---
+const monitorarCarrinhosIA = () => {
+  const iaRef = db.ref("carrinho_IA");
 
-// --- ATUALIZAÇÃO DE SEGURANÇA AQUI ---
-// Esta versão é mais segura: ela pega todos os dados e organiza no JS,
-// evitando erros de consulta (como orderByChild) em nós vazios.
+  // Escuta quando um NOVO registro de IA é adicionado
+  iaRef.on("child_added", async (snapshot) => {
+    const data = snapshot.val();
+    
+    // Verificação básica para evitar erros se o nó estiver vazio ou antigo
+    if (!data) return; 
+    
+    // Opcional: Lógica para ignorar dados muito antigos (ex: mais de 1 min atrás)
+    // const timeDiff = new Date() - new Date(data.timestamp);
+    // if (timeDiff > 60000) return;
+
+    console.log(`📷 NOVA DETECÇÃO IA: ${snapshot.key}`);
+
+    // Estrutura que o seu Frontend espera para o Popup
+    const alertaIA = {
+      tipo: "carrinho_IA",
+      carrinhoId: data.carrinhoId || "Desconhecido",
+      imagem: data.imagem || "", // URL ou Base64 vindo do Python/IA
+      x: data.x || 50,           // Posição X (%) do marcador
+      y: data.y || 50,           // Posição Y (%) do marcador
+      local: data.local || "Câmera IA"
+    };
+
+    // 1. Envia imediatamente para o WebSocket (Abre o Popup na tela)
+    broadcastAlert(alertaIA);
+
+    // 2. Salva também na tabela de "Histórico de Alertas"
+    // Assim fica registrado mesmo depois de fechar o popup
+    try {
+        await db.ref("alertas").push({
+            carrinhoId: alertaIA.carrinhoId,
+            mensagem: "Detectado por IA (Local Proibido)",
+            hora: new Date().toISOString(),
+            saida: alertaIA.local
+        });
+    } catch (error) {
+        console.error("Erro ao salvar histórico IA:", error);
+    }
+  });
+
+  console.log("Monitorando Realtime Database (carrinho_IA)...");
+};
+
+// --- INICIALIZA OS MONITORES ---
+monitorarCarrinhos();     // Sensores Físicos
+monitorarCarrinhosIA();   // Câmera IA
+
+
+// --- ENDPOINTS DA API ---
+
 app.get("/alertas", async (req, res) => {
   try {
     const alertasRef = db.ref("alertas");
-    const snapshot = await alertasRef.get(); // Pega o nó 'alertas'
+    const snapshot = await alertasRef.get();
     const alertas = [];
 
     if (snapshot.exists()) {
-      snapshot.forEach(child => { // Loop em cada alerta
+      snapshot.forEach(child => {
         alertas.push({ id: child.key, ...child.val() });
       });
-
-      // Organiza do mais novo para o mais antigo (aqui no JS)
       alertas.sort((a, b) => new Date(b.hora) - new Date(a.hora));
     }
 
-    res.json(alertas); // Envia o array (vazio ou preenchido)
+    res.json(alertas);
   } catch (error) {
-    console.error("ERRO GRAVE no endpoint /alertas:", error);
+    console.error("ERRO no endpoint /alertas:", error);
     res.status(500).json({ error: "Erro ao buscar alertas" });
   }
 });
-// --- FIM DA ATUALIZAÇÃO ---
 
-// Endpoint GET /carrinhos
 app.get("/carrinhos", async (req, res) => {
   try {
     const snapshot = await db.ref("carrinho").get();
@@ -143,7 +191,6 @@ app.get("/carrinhos", async (req, res) => {
   }
 });
 
-// Endpoint POST /carrinho/:id/status
 app.post("/carrinho/:id/status", async (req, res) => {
   try {
     const { id } = req.params;
@@ -157,7 +204,7 @@ app.post("/carrinho/:id/status", async (req, res) => {
     await carrinhoRef.update({ status: status });
 
     console.log(`Status do carrinho ${id} atualizado para: ${status}`);
-    res.status(200).json({ success: true, message: `Status do ${id} atualizado para ${status}` });
+    res.status(200).json({ success: true, message: `Status atualizado.` });
 
   } catch (error) {
     console.error("Erro ao atualizar status:", error);

@@ -13,29 +13,37 @@
     <title>Controle de Carrinhos</title>
     <link rel="icon" type="image/png" href="../assets/imgs/logo.png">
     <style>
-        /* ... (CSS principal, .controls, .marker, .alert-banner-top) ... */
+        /* --- CSS GERAL E UTILITÁRIOS --- */
         .fa, .fa-solid, .fas, .far, .fal, .fab { font-family: "Font Awesome 6 Free" !important; font-weight: 900 !important; }
         .user-circle { width: 34px; height: 34px; border-radius: 50%; background: #fff; }
         * { font-family: "Bai Jamjuree", sans-serif !important; }
+        
+        /* --- CONTROLES E MAPA --- */
         .controls { margin-bottom: 30px; display: flex; gap: 10px; }
         .controls button { padding: 10px 20px; font-size: 1em; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease, transform 0.2s ease; background-color: #007bff; color: white; }
         .controls button:hover { background-color: #0056b3; transform: translateY(-2px); }
         .controls button:active { transform: translateY(0); }
         .controls button.clear { background-color: #dc3545; }
         .controls button.clear:hover { background-color: #c82333; }
+        
         #mute-button { background-color: #6c757d; width: 50px; font-size: 1.2em; padding: 10px; }
         #mute-button:hover { background-color: #5a6268; }
+        
         #map-container { position: relative; width: fit-content; border: 2px solid #ced4da; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); border-radius: 8px; overflow: hidden; }
         #map-image { display: block; border-radius: 8px; }
+        
+        /* --- MARCADOR (USADO NO MAPA E NA IA) --- */
         .marker { width: 30px; height: 30px; background-color: rgba(220, 53, 69, 0.9); border: 3px solid #fff; border-radius: 50%; color: white; font-weight: bold; display: grid; place-items: center; font-size: 1em; position: absolute; transform: translate(-50%, -50%); display: none; animation: pulse 1.2s infinite ease-out; cursor: help; }
         .marker.active { display: grid; }
         @keyframes pulse { 0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); } 70% { transform: translate(-50%, -50%) scale(1.2); box-shadow: 0 0 0 15px rgba(220, 53, 69, 0); } 100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); } }
+        
+        /* --- BANNER DE ALERTA TOPO --- */
         .alert-banner-top { position: fixed; top: -100px; left: 0; width: 100%; background-color: #d9534f; color: white; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; z-index: 2000; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); transition: top 0.5s ease-in-out; box-sizing: border-box; }
         .alert-banner-top.active { top: 0; }
         .alert-banner-top p { margin: 0; font-size: 1.2em; font-weight: bold; }
         .alert-banner-top button { background-color: #fff; color: #d9534f; border: none; padding: 8px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 1em; }
         
-        /* ... (CSS da Tabela) ... */
+        /* --- TABELAS --- */
         .table-container { width: 100%; margin-top: 30px; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); padding: 20px; }
         table { width: 100%; border-collapse: collapse; font-size: 1em; }
         table th, table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd; }
@@ -52,8 +60,80 @@
         .pagination-controls button:hover { background-color: #5a6268; }
         .pagination-controls button:disabled { background-color: #ccc; cursor: not-allowed; }
         .pagination-controls span { font-size: 1em; color: #555; }
+
+        /* --- CSS: POPUP DA IA (MODAL) --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 650px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-top: 6px solid #d9534f;
+        }
+
+        .ia-image-container {
+            position: relative;
+            display: inline-block;
+            margin: 20px 0;
+            max-width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #333;
+            min-height: 200px;
+            background-color: #f0f0f0;
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+        }
+
+        .ia-image-container img {
+            max-width: 100%;
+            max-height: 60vh;
+            display: block;
+        }
+
+        .ia-image-container .marker {
+            display: grid;
+            z-index: 10;
+        }
+
+        .close-modal-btn {
+            background-color: #d9534f;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-modal-btn:hover { background-color: #c9302c; }
         
-        /* O CSS de .edit-button, .save-button, etc. FOI REMOVIDO */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
     </style>
 </head>
 
@@ -108,10 +188,9 @@
                             <th>Status</th>
                             <th>Contador</th>
                             <th>Última Saída</th>
-                            </tr>
+                        </tr>
                     </thead>
-                    <tbody id="carrinhos-table-body">
-                        </tbody>
+                    <tbody id="carrinhos-table-body"></tbody>
                 </table>
                 <div class="pagination-controls" id="carrinhos-pagination">
                     <button id="carrinhos-prev" onclick="prevPage('carrinhos')">Anterior</button>
@@ -131,8 +210,7 @@
                             <th>Data e Hora</th>
                         </tr>
                     </thead>
-                    <tbody id="alertas-table-body">
-                        </tbody>
+                    <tbody id="alertas-table-body"></tbody>
                 </table>
                 <div class="pagination-controls" id="alertas-pagination">
                     <button id="alertas-prev" onclick="prevPage('alertas')">Anterior</button>
@@ -141,8 +219,26 @@
                 </div>
             </div>
         </div>
-
     </main>
+
+    <div id="ia-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 style="color: #d9534f; font-weight: bold;">
+                <i class="fas fa-robot"></i> ALERTA DE I.A.
+            </h2>
+            <p id="ia-texto-alerta" style="font-size: 1.2em; margin: 10px 0;">Carrinho detectado fora da área.</p>
+            
+            <div class="ia-image-container">
+                <img id="ia-foto-display" src="" alt="Detecção IA">
+                <div id="ia-marker" class="marker active">!</div>
+            </div>
+
+            <br>
+            <button class="close-modal-btn" onclick="fecharModalIA()">
+                <i class="fas fa-check-circle"></i> CIENTE E LIMPAR
+            </button>
+        </div>
+    </div>
 
     <audio id="alert-sound" src="public/aviso.mp3" preload="auto"></audio>
     <footer class="footer">©2025 Todos os direitos reservados para Tech Seul</footer>
@@ -150,6 +246,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 
     <script>
         // --- 0. INICIALIZAÇÃO DO FIREBASE ---
@@ -164,7 +261,7 @@
         };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
-        // --- FIM DA INICIALIZAÇÃO ---
+        const storage = firebase.storage(); // Inicializa o Storage
 
         // --- Variáveis Globais ---
         let isMuted = false;
@@ -172,14 +269,10 @@
         const API_URL = 'http://localhost:3000';
         let allAlertasData = [];
         let allCarrinhosData = [];
-        let currentPage = {
-            alertas: 1,
-            carrinhos: 1
-        };
+        let currentPage = { alertas: 1, carrinhos: 1 };
         const ITEMS_PER_PAGE = 10;
-        // let linhaEmEdicao = null; // REMOVIDO
 
-        // --- 1. LÓGICA DE VOZ, SOM E ALERTA (Funções Globais) ---
+        // --- 1. CONFIGURAÇÃO DE VOZ E SOM ---
         function loadVoices() {
             let voices = window.speechSynthesis.getVoices();
             femaleVoice = voices.find(voice =>
@@ -193,11 +286,37 @@
         window.speechSynthesis.onvoiceschanged = loadVoices;
         loadVoices();
 
+        function playAlertSound(textoFala) {
+            if (isMuted) return;
+
+            const alertSound = document.getElementById('alert-sound');
+            const utterance = new SpeechSynthesisUtterance(textoFala);
+            utterance.lang = 'pt-BR';
+            utterance.rate = 1.0;
+            if (femaleVoice) { utterance.voice = femaleVoice; }
+            const speakNow = () => { window.speechSynthesis.speak(utterance); };
+
+            window.speechSynthesis.cancel(); 
+
+            if (alertSound) {
+                alertSound.currentTime = 0;
+                let playPromise = alertSound.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => { alertSound.onended = speakNow; })
+                        .catch(error => { console.warn("Autoplay bloqueado, apenas falando.", error); speakNow(); });
+                } else { speakNow(); }
+            } else { speakNow(); }
+        }
+
+        // --- 2. FUNÇÕES DE EXIBIÇÃO DE ALERTAS ---
+
         function showAlert(exitId, cartId) {
+            fecharModalIA();
             limparAlertas();
+
             let markerId = `marker-${exitId}`;
             if (!document.getElementById(markerId)) {
-                console.warn(`Marcador para saída ${exitId} não encontrado. Usando 'A' como padrão.`);
+                console.warn(`Marcador para saída ${exitId} não encontrado. Usando 'A'.`);
                 markerId = 'marker-A';
             }
             const markerElement = document.getElementById(markerId);
@@ -207,35 +326,81 @@
                 const banner = document.getElementById('alert-banner');
                 const bannerMessage = document.getElementById('banner-message');
                 const cartIdFalado = cartId.replace("ID", "ID ");
-                bannerMessage.textContent = `ALERTA: Carrinho ${cartIdFalado} saiu pela Saída ${exitId} e não retornou!`;
+                
+                bannerMessage.textContent = `ALERTA: Carrinho ${cartIdFalado} saiu pela Saída ${exitId}!`;
                 banner.classList.add('active');
-                if (!isMuted) {
-                    const alertSound = document.getElementById('alert-sound');
-                    const textoParaFalar = `Alerta! Carrinho ${cartIdFalado} saiu pela saída ${exitId} e não retornou à unidade. Encaminhe o responsável para verificar.`;
-                    const utterance = new SpeechSynthesisUtterance(textoParaFalar);
-                    utterance.lang = 'pt-BR';
-                    utterance.rate = 1.0;
-                    if (femaleVoice) { utterance.voice = femaleVoice; }
-                    const speakNow = () => { window.speechSynthesis.speak(utterance); };
-                    window.speechSynthesis.cancel();
-                    if (alertSound) { alertSound.pause(); alertSound.currentTime = 0; }
-                    if (alertSound) {
-                        let playPromise = alertSound.play();
-                        if (playPromise !== undefined) {
-                            playPromise.then(_ => { alertSound.onended = speakNow; })
-                                .catch(error => { console.warn("Autoplay do som bloqueado.", error); speakNow(); });
-                        } else { speakNow(); }
-                    } else { console.warn("Elemento <audio id='alert-sound'> não encontrado."); speakNow(); }
+
+                const texto = `Alerta! Carrinho ${cartIdFalado} saiu pela saída ${exitId} e não retornou.`;
+                playAlertSound(texto);
+            }
+        }
+
+        // --- NOVO: Alerta da IA com Depuração ---
+        async function mostrarPopupIA(data) {
+            console.log("--- DEBUG IA ---");
+            console.log("Objeto completo recebido:", data); // AQUI VAI MOSTRAR O QUE CHEGOU
+
+            limparAlertas(); 
+            
+            const modal = document.getElementById('ia-modal');
+            const img = document.getElementById('ia-foto-display');
+            const marker = document.getElementById('ia-marker');
+            const texto = document.getElementById('ia-texto-alerta');
+
+            // Loading
+            img.src = 'https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif';
+
+            const cId = data.carrinhoId || 'Desconhecido';
+            texto.innerText = `A IA identificou o carrinho ${cId} em local proibido.`;
+
+            // Exibe Modal
+            modal.classList.add('active');
+
+            // Posição
+            const posX = data.x !== undefined ? data.x : 50;
+            const posY = data.y !== undefined ? data.y : 50;
+            marker.style.left = `${posX}%`;
+            marker.style.top = `${posY}%`;
+
+            // Busca Imagem no Storage
+            const nomeArquivo = data.imagem; 
+
+            if (nomeArquivo) {
+                try {
+                    console.log("Tentando buscar no Storage:", `detec_imagens/${nomeArquivo}`);
+                    const storageRef = storage.ref(`detec_imagens/${nomeArquivo}`);
+                    const url = await storageRef.getDownloadURL();
+                    console.log("URL Sucesso:", url);
+                    img.src = url;
+                } catch (error) {
+                    console.error("ERRO NO STORAGE:", error);
+                    // Placeholder seguro
+                    img.src = 'https://placehold.co/600x400?text=Erro+Carregar+Imagem';
                 }
-            } else { console.warn(`Marcador de fallback 'marker-A' também não foi encontrado.`); }
+            } else {
+                console.warn("Campo 'imagem' vazio no JSON recebido");
+                img.src = 'https://placehold.co/600x400?text=Imagem+Nao+Informada';
+            }
+
+            // Som
+            const textoFala = `Atenção. Inteligência Artificial detectou o carrinho ${cId}. Verifique a imagem no painel.`;
+            playAlertSound(textoFala);
+        }
+
+        function fecharModalIA() {
+            const modal = document.getElementById('ia-modal');
+            modal.classList.remove('active');
+            limparAlertas();
         }
 
         function limparAlertas() {
-            const allMarkers = document.querySelectorAll('.marker');
+            const allMarkers = document.querySelectorAll('#map-container .marker');
             allMarkers.forEach(marker => { marker.classList.remove('active'); });
+            
             window.speechSynthesis.cancel();
             const alertSound = document.getElementById('alert-sound');
             if (alertSound) { alertSound.pause(); alertSound.currentTime = 0; }
+            
             const banner = document.getElementById('alert-banner');
             if (banner) { banner.classList.remove('active'); }
         }
@@ -247,23 +412,17 @@
             if (isMuted) {
                 icon.classList.remove('fa-volume-up');
                 icon.classList.add('fa-volume-mute');
-                limparAlertas();
+                limparAlertas(); 
             } else {
                 icon.classList.remove('fa-volume-mute');
                 icon.classList.add('fa-volume-up');
             }
         }
 
-        // --- 2. LÓGICA DAS TABELAS E PAGINAÇÃO (Funções Globais) ---
-
+        // --- 3. TABELAS E PAGINAÇÃO ---
         function formatarData(isoString) {
             if (!isoString) return 'N/A';
-            try {
-                const data = new Date(isoString);
-                return data.toLocaleString('pt-BR');
-            } catch (e) {
-                return isoString;
-            }
+            try { return new Date(isoString).toLocaleString('pt-BR'); } catch (e) { return isoString; }
         }
 
         function renderAlertasTable() {
@@ -274,25 +433,24 @@
             const start = (page - 1) * ITEMS_PER_PAGE;
             const end = start + ITEMS_PER_PAGE;
             const paginatedItems = allAlertasData.slice(start, end);
+            
             if (paginatedItems.length === 0) {
                 tableBody.innerHTML = '<tr><td colspan="4">Nenhum alerta encontrado.</td></tr>';
             } else {
                 paginatedItems.forEach(alerta => {
                     const row = `
-                <tr class="status-alerta_enviado">
-                    <td>${alerta.carrinhoId || 'N/A'}</td>
-                    <td>${alerta.mensagem || 'N/A'}</td>
-                    <td>${alerta.saida || 'N/A'}</td>
-                    <td>${formatarData(alerta.hora)}</td>
-                </tr>
-            `;
+                        <tr class="status-alerta_enviado">
+                            <td>${alerta.carrinhoId || 'N/A'}</td>
+                            <td>${alerta.mensagem || 'N/A'}</td>
+                            <td>${alerta.saida || 'N/A'}</td>
+                            <td>${formatarData(alerta.hora)}</td>
+                        </tr>`;
                     tableBody.innerHTML += row;
                 });
             }
             updatePaginationControls('alertas', allAlertasData.length);
         }
 
-        // ### LÓGICA DE RENDERIZAÇÃO DOS CARRINHOS (SIMPLIFICADA) ###
         function renderCarrinhosTable() {
             const tableBody = document.getElementById('carrinhos-table-body');
             if (!tableBody) return;
@@ -303,55 +461,23 @@
             const paginatedItems = allCarrinhosData.slice(start, end);
 
             if (paginatedItems.length === 0) {
-                // Colspan mudou de 5 para 4
                 tableBody.innerHTML = '<tr><td colspan="4">Nenhum carrinho encontrado.</td></tr>';
             } else {
                 paginatedItems.forEach(carrinho => {
                     const statusClass = `status-${carrinho.status || 'desconhecido'}`;
-                    // A célula <td> de Ação foi REMOVIDA
                     const row = `
-                <tr class="${statusClass}" data-cart-id="${carrinho.id}">
-                    <td>${carrinho.id}</td>
-                    <td class="cell-status">${carrinho.status || 'N/A'}</td>
-                    <td>${carrinho.contador || '0'}</td>
-                    <td>${carrinho.ultima_saida || 'N/A'}</td>
-                </tr>
-            `;
+                        <tr class="${statusClass}" data-cart-id="${carrinho.id}">
+                            <td>${carrinho.id}</td>
+                            <td class="cell-status">${carrinho.status || 'N/A'}</td>
+                            <td>${carrinho.contador || '0'}</td>
+                            <td>${carrinho.ultima_saida || 'N/A'}</td>
+                        </tr>`;
                     tableBody.innerHTML += row;
                 });
             }
             updatePaginationControls('carrinhos', allCarrinhosData.length);
         }
 
-        async function fetchAlertas() {
-            try {
-                const response = await fetch(`${API_URL}/alertas`);
-                if (!response.ok) throw new Error('Erro ao buscar alertas');
-                allAlertasData = await response.json();
-                currentPage.alertas = 1;
-                renderAlertasTable();
-            } catch (error) {
-                console.error(error);
-                document.getElementById('alertas-table-body').innerHTML = '<tr><td colspan="4">Erro ao carregar dados.</td></tr>';
-            }
-        }
-
-        async function fetchCarrinhos() {
-            try {
-                const response = await fetch(`${API_URL}/carrinhos`);
-                if (!response.ok) throw new Error('Erro ao buscar carrinhos');
-                allCarrinhosData = await response.json();
-                currentPage.carrinhos = 1;
-                renderCarrinhosTable();
-            } catch (error) {
-                console.error(error);
-                document.getElementById('carrinhos-table-body').innerHTML = '<tr><td colspan="4">Erro ao carregar dados.</td></tr>';
-            }
-        }
-        
-        // --- FUNÇÕES DE EDIÇÃO (handleEditStatus, etc.) FORAM REMOVIDAS ---
-
-        // Funções de controle da Paginação
         function updatePaginationControls(type, totalItems) {
             const page = currentPage[type];
             const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
@@ -367,44 +493,57 @@
             const totalPages = Math.ceil((type === 'alertas' ? allAlertasData.length : allCarrinhosData.length) / ITEMS_PER_PAGE);
             if (currentPage[type] < totalPages) {
                 currentPage[type]++;
-                if (type === 'alertas') renderAlertasTable();
-                else renderCarrinhosTable();
+                type === 'alertas' ? renderAlertasTable() : renderCarrinhosTable();
             }
         }
 
         function prevPage(type) {
             if (currentPage[type] > 1) {
                 currentPage[type]--;
-                if (type === 'alertas') renderAlertasTable();
-                else renderCarrinhosTable();
+                type === 'alertas' ? renderAlertasTable() : renderCarrinhosTable();
             }
         }
 
+        async function fetchAlertas() {
+            try {
+                const response = await fetch(`${API_URL}/alertas`);
+                if (!response.ok) throw new Error('Erro ao buscar alertas');
+                allAlertasData = await response.json();
+                currentPage.alertas = 1;
+                renderAlertasTable();
+            } catch (error) { console.error(error); }
+        }
 
-        // --- 3. CÓDIGO DO WEBSOCKET E INICIALIZAÇÃO ---
+        async function fetchCarrinhos() {
+            try {
+                const response = await fetch(`${API_URL}/carrinhos`);
+                if (!response.ok) throw new Error('Erro ao buscar carrinhos');
+                allCarrinhosData = await response.json();
+                currentPage.carrinhos = 1;
+                renderCarrinhosTable();
+            } catch (error) { console.error(error); }
+        }
+
+        // --- 4. WEBSOCKET E AUTH ---
         document.addEventListener("DOMContentLoaded", () => {
-            
-            // 1. Inicia a checagem de login (que vai chamar o fetch de dados)
             buscarNomeDoUsuario();
-            
-            // 2. Inicia o WebSocket
             connectWebSocket();
 
-            // 3. O 'Event Listener' para edição FOI REMOVIDO
-            
-            // 4. Definição do WebSocket
             function connectWebSocket() {
                 const ws = new WebSocket('ws://localhost:3000');
                 ws.onopen = () => { console.log('Conectado ao servidor de alertas!'); };
                 ws.onmessage = (event) => {
                     const data = JSON.parse(event.data);
                     console.log("Recebeu do WebSocket:", data);
+                    
                     if (data.tipo === 'ALERTA_CARRINHO') {
-                        const carrinhoId = data.carrinhoId;
-                        const saida = data.saida;
-                        showAlert(saida, carrinhoId);
+                        showAlert(data.saida, data.carrinhoId);
                         fetchAlertas();
                         fetchCarrinhos();
+                    }
+                    else if (data.tipo === 'carrinho_IA') {
+                        mostrarPopupIA(data);
+                        fetchAlertas();
                     }
                 };
                 ws.onclose = () => {
@@ -418,36 +557,20 @@
             }
         });
 
-        // --- 4. FUNÇÃO DE AUTENTICAÇÃO ---
         function buscarNomeDoUsuario() {
-            console.log("Iniciando buscarNomeDoUsuario...");
             const spanNomeUsuario = document.getElementById('nome-usuario-logado');
-            if (!spanNomeUsuario) {
-                console.error("ERRO: O span 'nome-usuario-logado' não foi encontrado!");
-                return;
-            }
+            if (!spanNomeUsuario) return;
             auth.onAuthStateChanged((user) => {
-                console.log("Auth state mudou.");
                 if (user) {
-                    console.log("Usuário detectado:", user.uid);
                     const nome = user.displayName || user.email;
-                    if (nome) {
-                        spanNomeUsuario.innerText = `${nome.toUpperCase()} - ADM`;
-                    } else {
-                        spanNomeUsuario.innerText = "ADMINISTRADOR";
-                    }
-                    console.log(`Nome do usuário atualizado para: ${spanNomeUsuario.innerText}`);
+                    spanNomeUsuario.innerText = nome ? `${nome.toUpperCase()} - ADM` : "ADMINISTRADOR";
                 } else {
-                    console.log("Nenhum usuário está logado.");
                     spanNomeUsuario.innerText = "NÃO LOGADO";
                 }
-                
-                // Carrega os dados DEPOIS de saber o status do login
                 fetchAlertas();
                 fetchCarrinhos();
             });
         }
     </script>
 </body>
-
 </html>
